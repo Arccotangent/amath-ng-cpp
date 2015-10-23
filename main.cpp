@@ -18,6 +18,14 @@ void printAns(amath_float ans)
 	cout << std::setprecision(std::numeric_limits<amath_float>::max_digits10) << flush << static_cast<string>(ans) << endl << flush;
 }
 
+amath_float anegate(amath_float num)
+{
+	amath_float onum = num;
+	num -= onum;
+	num -= onum;
+	return num;
+}
+
 amath_float aexp(amath_float base, cpp_int exponent_r)
 {
 	amath_float result = 1;
@@ -47,25 +55,21 @@ cpp_int alcd(cpp_int num1, cpp_int num2)
 
 void afactor(cpp_int num)
 {
-	cout << static_cast<string>(num) << ": ";
-	//string factors = "";
+	cout << static_cast<string>(num) << ": " << flush;
 	while (num % 2 == 0)
 	{
 		num /= 2;
-		//factors = factors + "2 ";
-		cout << "2 ";
+		cout << "2 " << flush;
 	}
 	//num is odd
 	cpp_int sqrt_num = boost::multiprecision::sqrt(num);
-	//cout << "Testing divisibility by numbers 3 to " << sqrt_num << endl << flush;
 	for (cpp_int z = 3; z <= sqrt_num; z += 2)
 	{
 		//cout << "[" << z << " / " << sqrt_num << "]\r" << flush;
 		while (num % z == 0)
 		{
 			num /= z;
-			//factors = factors + static_cast<string>(z) + " ";
-			cout << z << " ";
+			cout << z << " " << flush;
 		}
 	}
 
@@ -74,8 +78,6 @@ void afactor(cpp_int num)
 		cout << num;
 	}
 	cout << endl;
-	//cout << "Finished." << endl;
-	//return factors;
 }
 
 int getOpCode(unsigned short argcount, string op)
@@ -451,15 +453,18 @@ int main(int argc, char *argv[])
 		amath_float b2 = b / a;
 		b2 /= 2;
 		amath_float cs = aexp(b2, 2);
-		cout << static_cast<string>(b2) << endl << static_cast<string>(cs) << endl;
 		//End side work
-		amath_float neg_cs = -cs;
+		amath_float neg_cs = anegate(cs);
 		amath_float vtx_y = c + neg_cs;
 		amath_float vtx_x = sqrt(cs);
+		if (b < 0)
+		{
+			vtx_x = anegate(vtx_x);
+		}
 		cout << "VERTEX FORM: y = (x + " << static_cast<string>(vtx_x) << ")² + " << static_cast<string>(vtx_y) <<  endl;
-		amath_float neg_vtx_x = -vtx_x;
+		amath_float neg_vtx_x = anegate(vtx_x);
 		cout << "VERTEX: (" << static_cast<string>(neg_vtx_x) << ", " << static_cast<string>(vtx_y) << ")" << endl;
-		amath_float neg_b = -b;
+		amath_float neg_b = anegate(b);
 		amath_float a2 = a * 2;
 		amath_float vtx_x_verify = neg_b / a2;
 		if (vtx_x_verify == neg_vtx_x)
