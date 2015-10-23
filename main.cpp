@@ -456,7 +456,7 @@ int main(int argc, char *argv[])
 		amath_float neg_cs = -cs;
 		amath_float vtx_y = c + neg_cs;
 		amath_float vtx_x = sqrt(cs);
-		cout << "VERTEX FORM: y = (x + " << static_cast<string>(vtx_x) << ") + " << static_cast<string>(vtx_y) <<  endl;
+		cout << "VERTEX FORM: y = (x + " << static_cast<string>(vtx_x) << ")² + " << static_cast<string>(vtx_y) <<  endl;
 		amath_float neg_vtx_x = -vtx_x;
 		cout << "VERTEX: (" << static_cast<string>(neg_vtx_x) << ", " << static_cast<string>(vtx_y) << ")" << endl;
 		amath_float neg_b = -b;
