@@ -390,7 +390,7 @@ int main(int argc, char *argv[])
 			cout << "Perform another test to confirm? (y/n) ";
 			char yn;
 			cin >> yn;
-			if (yn == 'y')
+			if (yn == 'y' || yn == 'Y')
 			{
 				cout << "Confirming prime..." << endl;
 				if (miller_rabin_test((prm - 1) / 2, 25, gen2))
