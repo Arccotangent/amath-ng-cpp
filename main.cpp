@@ -470,7 +470,7 @@ int main(int argc, char *argv[])
 		if (vtx_x_verify == neg_vtx_x)
 			cout << "VERIFIED - Good vertex." << endl;
 		else
-			cout << "NOT VERIFIED - Bad vertex." << endl;
+			cout << "NOT VERIFIED - Bad vertex. If you can manually verify this vertex (-b / 2a) then please report this error on the GitLab repository." << endl;
 	}
 	else if (opcode == -1)
 	{
