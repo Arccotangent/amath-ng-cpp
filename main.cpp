@@ -190,6 +190,13 @@ int getOpCode(unsigned short argcount, string op)
 		else
 			opcode = -1;
 	}
+	else if (strcmp(op_c, "hypot") == 0)
+	{
+		if (arg == 2)
+			opcode = 16;
+		else
+			opcode = -1;
+	}
 	else if (strcmp(op_c, "deb") == 0)
 		opcode = -100;
 	else
@@ -221,6 +228,8 @@ int main(int argc, char *argv[])
 						"prm <number> - Test if number is prime\n"
 						"fac <number> - Get prime factors of number\n"
 						"vtx <a> <b> <c> - Get vertex of quadratic equation equal to y OR 0\n"
+						//"dst <x1> <y1> <x2> <y2> - Distance formula\n"
+						"hypot <side1> <side2> - Get hypotenuse of right triangle\n"
 						"\nMAXIMUM NUMBER PRECISION BEFORE SCIENTIFIC NOTATION IS USED IS 2,500 DIGITS."
 						"\n");
 		return 1;
@@ -471,6 +480,17 @@ int main(int argc, char *argv[])
 			cout << "VERIFIED - Good vertex." << endl;
 		else
 			cout << "NOT VERIFIED - Bad vertex. If you can manually verify this vertex (-b / 2a) then please report this error on the GitLab repository." << endl;
+	}
+	else if (opcode == 16)
+	{
+		amath_float side1, side2;
+		side1.assign(argv[2]);
+		side2.assign(argv[3]);
+		amath_float hypot;
+		side1 = aexp(side1, 2);
+		side2 = aexp(side2, 2);
+		hypot = asqrt(side1 + side2);
+		cout << static_cast<string>(hypot) << endl;
 	}
 	else if (opcode == -1)
 	{
