@@ -25,3 +25,20 @@ unix:!macx: LIBS += -L$$PWD/../../../usr/local/lib/ -lboost_random
 
 INCLUDEPATH += $$PWD/../../../usr/local/include
 DEPENDPATH += $$PWD/../../../usr/local/include
+
+unix:!macx: LIBS += -L$$PWD/../../../usr/local/lib/ -lboost_thread
+
+INCLUDEPATH += $$PWD/../../../usr/local/include
+DEPENDPATH += $$PWD/../../../usr/local/include
+
+unix:!macx: LIBS += -L$$PWD/../../../usr/local/lib/ -lboost_system
+
+INCLUDEPATH += $$PWD/../../../usr/local/include
+DEPENDPATH += $$PWD/../../../usr/local/include
+
+DISTFILES += \
+    LICENSE \
+    README.md
+
+HEADERS += \
+    flopstest.hpp

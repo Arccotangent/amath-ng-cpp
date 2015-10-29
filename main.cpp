@@ -8,22 +8,25 @@
 #include <boost/random/random_device.hpp>
 #include <cstdio>
 #include <iostream>
+#include "flopstest.hpp"
 using namespace std;
 using namespace boost::multiprecision;
 using boost::multiprecision::backends::gmp_float;
 typedef number<gmp_float<2500>> amath_float;
 
+amath_float toDegrees(amath_float rad)
+{
+	return rad * (180 / 3.14159265358979323846264338);
+}
+
+amath_float toRadians(amath_float deg)
+{
+	return deg * (3.14159265358979323846264338 / 180);
+}
+
 void printAns(amath_float ans)
 {
 	cout << std::setprecision(std::numeric_limits<amath_float>::max_digits10) << flush << static_cast<string>(ans) << endl << flush;
-}
-
-amath_float anegate(amath_float num)
-{
-	amath_float onum = num;
-	num -= onum;
-	num -= onum;
-	return num;
 }
 
 amath_float aexp(amath_float base, cpp_int exponent_r)
@@ -35,6 +38,24 @@ amath_float aexp(amath_float base, cpp_int exponent_r)
 		result = result * base;
 	}
 	return result;
+}
+
+cpp_int afct(cpp_int num)
+{
+	cpp_int result = 1;
+	for (cpp_int i = num; i > 1; i--)
+	{
+		result *= i;
+	}
+	return result;
+}
+
+amath_float anegate(amath_float num)
+{
+	amath_float onum = num;
+	num -= onum;
+	num -= onum;
+	return num;
 }
 
 amath_float asqrt(amath_float num)
@@ -197,6 +218,22 @@ int getOpCode(unsigned short argcount, string op)
 		else
 			opcode = -1;
 	}
+	else if (strcmp(op_c, "fct") == 0)
+	{
+		if (arg == 1)
+			opcode = 17;
+		else
+			opcode = -1;
+	}
+	else if (strcmp(op_c, "sin") == 0)
+	{
+		if (arg == 1)
+			opcode = 18;
+		else
+			opcode = -1;
+	}
+	else if (strcmp(op_c, "flopstest") == 0)
+		opcode = -50;
 	else if (strcmp(op_c, "deb") == 0)
 		opcode = -100;
 	else
@@ -228,8 +265,11 @@ int main(int argc, char *argv[])
 						"prm <number> - Test if number is prime\n"
 						"fac <number> - Get prime factors of number\n"
 						"vtx <a> <b> <c> - Get vertex of quadratic equation equal to y OR 0\n"
-						//"dst <x1> <y1> <x2> <y2> - Distance formula\n"
+						//"dst <x1> <y1> <x2> <y2> - Get distance between 2 points\n"
 						"hypot <side1> <side2> - Get hypotenuse of right triangle\n"
+						"fct <number> - Factorial of number\n"
+						"sin <number> - Trigonometric function - Sine\n"
+						"flopstest - How fast can your computer do math?\n"
 						"\nMAXIMUM NUMBER PRECISION BEFORE SCIENTIFIC NOTATION IS USED IS 2,500 DIGITS."
 						"\n");
 		return 1;
@@ -390,7 +430,7 @@ int main(int argc, char *argv[])
 	{
 		cpp_int prm;
 		prm.assign(argv[2]);
-		//mt11213b base_gen(clock());
+		//boost::random::mt11213b base_gen(clock());
 		//independent_bits_engine<mt11213b, 256, int_type> gen(base_gen);
 		boost::random::mt19937 gen2(clock());
 		if (miller_rabin_test(prm, 25, gen2))
@@ -492,6 +532,20 @@ int main(int argc, char *argv[])
 		hypot = asqrt(side1 + side2);
 		cout << static_cast<string>(hypot) << endl;
 	}
+	else if (opcode == 17)
+	{
+		cpp_int num;
+		num.assign(argv[2]);
+		cpp_int fac = afct(num);
+		cout << static_cast<string>(fac) << endl;
+	}
+	else if (opcode == 18)
+	{
+		amath_float num;
+		num.assign(argv[2]);
+		amath_float oh = boost::multiprecision::sin(toRadians(num));
+		cout << static_cast<string>(oh) << endl;
+	}
 	else if (opcode == -1)
 	{
 		cerr << "[AMATH-NG] ERR: Review your argument count!" << endl;
@@ -499,6 +553,10 @@ int main(int argc, char *argv[])
 	else if (opcode == -2)
 	{
 		cerr << "[AMATH-NG] ERR: Invalid operation!" << endl;
+	}
+	else if (opcode == -50)
+	{
+		speedtest();
 	}
 	else if (opcode == -100)
 	{
