@@ -604,21 +604,21 @@ int main(int argc, char *argv[])
 	{
 		amath_float num;
 		num.assign(argv[2]);
-		amath_float as = boost::multiprecision::asin(toRadians(num));
+		amath_float as = toDegrees(boost::multiprecision::asin(num));
 		cout << static_cast<string>(as) << endl;
 	}
 	else if (opcode == 22)
 	{
 		amath_float num;
 		num.assign(argv[2]);
-		amath_float ac = boost::multiprecision::acos(toRadians(num));
+		amath_float ac = toDegrees(boost::multiprecision::acos(num));
 		cout << static_cast<string>(ac) << endl;
 	}
 	else if (opcode == 23)
 	{
 		amath_float num;
 		num.assign(argv[2]);
-		amath_float at = boost::multiprecision::acos(toRadians(num));
+		amath_float at = toDegrees(boost::multiprecision::acos(num));
 		cout << static_cast<string>(at) << endl;
 	}
 	else if (opcode == -1)
