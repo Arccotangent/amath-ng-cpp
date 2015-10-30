@@ -232,6 +232,41 @@ int getOpCode(unsigned short argcount, string op)
 		else
 			opcode = -1;
 	}
+	else if (strcmp(op_c, "cos") == 0)
+	{
+		if (arg == 1)
+			opcode = 19;
+		else
+			opcode = -1;
+	}
+	else if (strcmp(op_c, "tan") == 0)
+	{
+		if (arg == 1)
+			opcode = 20;
+		else
+			opcode = -1;
+	}
+	else if (strcmp(op_c, "asin") == 0)
+	{
+		if (arg == 1)
+			opcode = 21;
+		else
+			opcode = -1;
+	}
+	else if (strcmp(op_c, "acos") == 0)
+	{
+		if (arg == 1)
+			opcode = 22;
+		else
+			opcode = -1;
+	}
+	else if (strcmp(op_c, "atan") == 0)
+	{
+		if (arg == 1)
+			opcode = 23;
+		else
+			opcode = -1;
+	}
 	else if (strcmp(op_c, "flopstest") == 0)
 		opcode = -50;
 	else if (strcmp(op_c, "deb") == 0)
@@ -269,6 +304,11 @@ int main(int argc, char *argv[])
 						"hypot <side1> <side2> - Get hypotenuse of right triangle\n"
 						"fct <number> - Factorial of number\n"
 						"sin <number> - Trigonometric function - Sine\n"
+						"cos <number> - Trigonometric function - Cosine\n"
+						"tan <number> - Trigonometric function - Tangent\n"
+						"asin <number> - Trigonometric function - Arcsine\n"
+						"acos <number> - Trigonometric function - Arccosine\n"
+						"atan <number> - Trigonometric function - Arctangent\n"
 						"flopstest - How fast can your computer do math?\n"
 						"\nMAXIMUM NUMBER PRECISION BEFORE SCIENTIFIC NOTATION IS USED IS 2,500 DIGITS."
 						"\n");
@@ -545,6 +585,41 @@ int main(int argc, char *argv[])
 		num.assign(argv[2]);
 		amath_float oh = boost::multiprecision::sin(toRadians(num));
 		cout << static_cast<string>(oh) << endl;
+	}
+	else if (opcode == 19)
+	{
+		amath_float num;
+		num.assign(argv[2]);
+		amath_float ah = boost::multiprecision::cos(toRadians(num));
+		cout << static_cast<string>(ah) << endl;
+	}
+	else if (opcode == 20)
+	{
+		amath_float num;
+		num.assign(argv[2]);
+		amath_float oa = boost::multiprecision::tan(toRadians(num));
+		cout << static_cast<string>(oa) << endl;
+	}
+	else if (opcode == 21)
+	{
+		amath_float num;
+		num.assign(argv[2]);
+		amath_float as = boost::multiprecision::asin(toRadians(num));
+		cout << static_cast<string>(as) << endl;
+	}
+	else if (opcode == 22)
+	{
+		amath_float num;
+		num.assign(argv[2]);
+		amath_float ac = boost::multiprecision::acos(toRadians(num));
+		cout << static_cast<string>(ac) << endl;
+	}
+	else if (opcode == 23)
+	{
+		amath_float num;
+		num.assign(argv[2]);
+		amath_float at = boost::multiprecision::acos(toRadians(num));
+		cout << static_cast<string>(at) << endl;
 	}
 	else if (opcode == -1)
 	{
