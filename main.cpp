@@ -86,7 +86,6 @@ void afactor(cpp_int num)
 	cpp_int sqrt_num = boost::multiprecision::sqrt(num);
 	for (cpp_int z = 3; z <= sqrt_num; z += 2)
 	{
-		//cout << "[" << z << " / " << sqrt_num << "]\r" << flush;
 		while (num % z == 0)
 		{
 			num /= z;
@@ -281,6 +280,7 @@ int main(int argc, char *argv[])
 	if (argc < 2)
 	{
 		//If an operation is removed, do not delete it, but simply comment it out here.
+		//Unless it is permanently removed
 		fprintf(stderr, "AMath-NG 1.0 - A Command Line Calculator by Arccotangent\n\n"
 						"Usage: amath-ng <operation> <numbers>\n\n"
 						"Valid operations include:\n"
@@ -320,8 +320,6 @@ int main(int argc, char *argv[])
 	{
 		amath_float result = 0;
 		unsigned int argcount = argc - 2;
-		//cout << argv[2] << endl;
-		//cout << argv[3] << endl;
 		for (unsigned int i = 0; i < argcount; i++)
 		{
 			amath_float addend;
@@ -333,21 +331,15 @@ int main(int argc, char *argv[])
 	else if (opcode == 2)
 	{
 		amath_float result;
-		//cout << "1" << endl;
 		result.assign(argv[2]);
 		unsigned int argcount = argc - 3;
 		for (unsigned int i = 0; i < argcount; i++)
 		{
 			amath_float subtrahend;
-			//cout << "2" << endl;
 			subtrahend.assign(argv[i + 3]);
-			//cout << "3" << endl;
-			//cout << subtrahend << endl;
 			result -= subtrahend;
-			//cout << result << endl;
 		}
 		printAns(result);
-		//cout << std::setprecision(std::numeric_limits<amath_float>::max_digits10) << static_cast<string>(result) << endl;
 	}
 	else if (opcode == 3)
 	{
@@ -360,7 +352,6 @@ int main(int argc, char *argv[])
 			result *= multiplicand;
 		}
 		printAns(result);
-		//cout << std::setprecision(std::numeric_limits<amath_float>::max_digits10) << static_cast<string>(result) << endl;
 	}
 	else if (opcode == 4)
 	{
@@ -374,7 +365,6 @@ int main(int argc, char *argv[])
 			result /= divisor;
 		}
 		printAns(result);
-		//cout << std::setprecision(std::numeric_limits<amath_float>::max_digits10) << static_cast<string>(result) << endl;
 	}
 	else if (opcode == 5)
 	{
@@ -384,7 +374,6 @@ int main(int argc, char *argv[])
 		e.assign(argv[3]);
 		amath_float result = aexp(b, e);
 		printAns(result);
-		//cout << std::setprecision(std::numeric_limits<amath_float>::max_digits10) << static_cast<string>(result) << endl;
 	}
 	else if (opcode == 6)
 	{
@@ -406,10 +395,7 @@ int main(int argc, char *argv[])
 		amath_float neg_b = -b;
 		amath_float b2 = aexp(b, 2);
 		amath_float fac = 4 * a * c;
-		//cout << "FPE" << endl;
 		amath_float discrim = b2 - fac;
-		//cout << "FPE" << endl;
-		//cout << static_cast<string>(b2m4ac) << endl;
 		if (discrim < 0)
 		{
 			cout << "[AMATH-NG] ERR: No real solutions! Discriminant is negative. (Discriminant = " << static_cast<string>(discrim) << ")" << endl;
@@ -470,8 +456,6 @@ int main(int argc, char *argv[])
 	{
 		cpp_int prm;
 		prm.assign(argv[2]);
-		//boost::random::mt11213b base_gen(clock());
-		//independent_bits_engine<mt11213b, 256, int_type> gen(base_gen);
 		boost::random::mt19937 gen2(clock());
 		if (miller_rabin_test(prm, 25, gen2))
 		{
@@ -508,7 +492,7 @@ int main(int argc, char *argv[])
 		min.assign(argv[2]);
 		max.assign(argv[3]);
 		boost::random::random_device r;
-		signed long initnum = r();
+		unsigned long long initnum = r();
 		boost::random::mt19937_64 gen(initnum);
 		initnum = 0;
 		boost::random::uniform_int_distribution<cpp_int> distrib(min, max);
@@ -519,7 +503,6 @@ int main(int argc, char *argv[])
 		cpp_int num;
 		num.assign(argv[2]);
 		afactor(num);
-		//cout << factors << endl;
 	}
 	else if (opcode == 14)
 	{
@@ -546,20 +529,24 @@ int main(int argc, char *argv[])
 		amath_float neg_cs = anegate(cs);
 		amath_float vtx_y = c + neg_cs;
 		amath_float vtx_x = sqrt(cs);
-		if (b < 0)
-		{
-			vtx_x = anegate(vtx_x);
-		}
+		//vtx_x = anegate(vtx_x);
 		cout << "VERTEX FORM: y = (x + " << static_cast<string>(vtx_x) << ")² + " << static_cast<string>(vtx_y) <<  endl;
 		amath_float neg_vtx_x = anegate(vtx_x);
 		cout << "VERTEX: (" << static_cast<string>(neg_vtx_x) << ", " << static_cast<string>(vtx_y) << ")" << endl;
-		amath_float neg_b = anegate(b);
+		amath_float neg_b;
+		if (b < 0 && a >= 0)
+			neg_b = b;
+		else
+			neg_b = anegate(b);
 		amath_float a2 = a * 2;
 		amath_float vtx_x_verify = neg_b / a2;
 		if (vtx_x_verify == neg_vtx_x)
 			cout << "VERIFIED - Good vertex." << endl;
 		else
+		{
 			cout << "NOT VERIFIED - Bad vertex. If you can manually verify this vertex (-b / 2a) then please report this error on the GitLab repository." << endl;
+			cout << a2 << endl << neg_b << endl << neg_vtx_x << endl;
+		}
 	}
 	else if (opcode == 16)
 	{
@@ -635,11 +622,7 @@ int main(int argc, char *argv[])
 	}
 	else if (opcode == -100)
 	{
-		//amath_float t;
-		//t.assign(3.5);
-		//cout << t << endl;
-		//string d;
-		//cin >> d;
+		//Debug code here
 	}
 	else
 		cerr << "[AMATH-NG] ERR: An unknown error has occurred." << endl;

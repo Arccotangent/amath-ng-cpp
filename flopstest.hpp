@@ -16,8 +16,7 @@ void counter()
 	time_t current = time(0);
 	float diff = current - initial;
 	float hps = count_int / diff;
-	//system("clear");
-	cout << "\033[1;1H";
+	cout << "\033[1;1H"; //Clear terminal screen
 	cout << "\t\t\t\t\t\t\t\t\t\t\t\t\t\r";
 	cout << count_int << " total floating point ops (" << hps << " FLOP/s)" << endl;
 }
@@ -36,7 +35,6 @@ void speedtest()
 {
 	system("clear");
 	boost::thread hydrogen(dsp);
-	//hydrogen.join();
 	while (true)
 	{
 		c = a + b;
