@@ -8,6 +8,7 @@
 #include <boost/random/random_device.hpp>
 #include <cstdio>
 #include <iostream>
+#include <cstdlib>
 #include "flopstest.hpp"
 using namespace std;
 using namespace boost::multiprecision;
@@ -29,15 +30,9 @@ void printAns(amath_float ans)
 	cout << std::setprecision(std::numeric_limits<amath_float>::max_digits10) << flush << static_cast<string>(ans) << endl << flush;
 }
 
-amath_float aexp(amath_float base, cpp_int exponent_r)
+amath_float aexp(amath_float base, amath_float exponent_r)
 {
-	amath_float result = 1;
-	cpp_int exponent = exponent_r;
-	for (cpp_int i = 0; i < exponent; i++)
-	{
-		result = result * base;
-	}
-	return result;
+	return boost::multiprecision::pow(base, exponent_r);
 }
 
 cpp_int afct(cpp_int num)
@@ -184,7 +179,7 @@ int getOpCode(unsigned short argcount, string op)
 	}
 	else if (strcmp(op_c, "rand") == 0)
 	{
-		if (arg == 2)
+		if (arg == 2 || arg == 3)
 			opcode = 12;
 		else
 			opcode = -1;
@@ -266,6 +261,13 @@ int getOpCode(unsigned short argcount, string op)
 		else
 			opcode = -1;
 	}
+	else if (strcmp(op_c, "cbrt") == 0)
+	{
+		if (arg == 1)
+			opcode = 24;
+		else
+			opcode = -1;
+	}
 	else if (strcmp(op_c, "flopstest") == 0)
 		opcode = -50;
 	else if (strcmp(op_c, "deb") == 0)
@@ -289,13 +291,14 @@ int main(int argc, char *argv[])
 						"mul <2+ numbers> - Multiply numbers\n"
 						"div <2+ numbers> - Divide numbers\n"
 						"mod <2 numbers> - Get modulus of numbers (division remainder)\n"
-						"exp <base (100 decimal places)> <exponent (whole number)> - Calculate BASE^EXPONENT\n"
+						"exp <base> <exponent> - Calculate BASE^EXPONENT\n"
 						"sqrt <1 number> - Square root\n"
+						"cbrt <1 number> - Cube root\n"
 						"qdr <a> <b> <c> - Solve quadratic equation equal to 0\n"
 						"sf <1 number> - Get amount of sig figs in number\n"
 						"gcf <2+ numbers> - Get GCF of numbers\n"
 						//"lcd <2 numbers> - Get LCD of 2 numbers\n"
-						"rand <min> <max> - Generate random integer between MIN and MAX with optional SEED\n"
+						"rand <min> <max> [seed] - Generate random integer between MIN and MAX with optional SEED\n"
 						"aoc <radius> - Calculate approximate area of circle\n"
 						"prm <number> - Test if number is prime\n"
 						"fac <number> - Get prime factors of number\n"
@@ -370,7 +373,7 @@ int main(int argc, char *argv[])
 	{
 		amath_float b;
 		b.assign(argv[2]);
-		cpp_int e;
+		amath_float e;
 		e.assign(argv[3]);
 		amath_float result = aexp(b, e);
 		printAns(result);
@@ -492,7 +495,12 @@ int main(int argc, char *argv[])
 		min.assign(argv[2]);
 		max.assign(argv[3]);
 		boost::random::random_device r;
-		unsigned long long initnum = r();
+		unsigned long long initnum;
+		char** a;
+		if (argc == 5)
+			initnum = strtol(argv[4], a, 10);
+		else
+			initnum = r();
 		boost::random::mt19937_64 gen(initnum);
 		initnum = 0;
 		boost::random::uniform_int_distribution<cpp_int> distrib(min, max);
@@ -529,7 +537,6 @@ int main(int argc, char *argv[])
 		amath_float neg_cs = anegate(cs);
 		amath_float vtx_y = c + neg_cs;
 		amath_float vtx_x = sqrt(cs);
-		//vtx_x = anegate(vtx_x);
 		cout << "VERTEX FORM: y = (x + " << static_cast<string>(vtx_x) << ")² + " << static_cast<string>(vtx_y) <<  endl;
 		amath_float neg_vtx_x = anegate(vtx_x);
 		cout << "VERTEX: (" << static_cast<string>(neg_vtx_x) << ", " << static_cast<string>(vtx_y) << ")" << endl;
@@ -605,8 +612,18 @@ int main(int argc, char *argv[])
 	{
 		amath_float num;
 		num.assign(argv[2]);
-		amath_float at = toDegrees(boost::multiprecision::acos(num));
+		amath_float at = toDegrees(boost::multiprecision::atan(num));
 		cout << static_cast<string>(at) << endl;
+	}
+	else if (opcode == 24)
+	{
+		amath_float num;
+		num.assign(argv[2]);
+		amath_float o = 1;
+		amath_float t = 3;
+		amath_float odt = o / t;
+		amath_float c = aexp(num, odt);
+		cout << static_cast<string>(c) << endl;
 	}
 	else if (opcode == -1)
 	{
