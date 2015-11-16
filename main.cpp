@@ -268,6 +268,20 @@ int getOpCode(unsigned short argcount, string op)
 		else
 			opcode = -1;
 	}
+	else if (strcmp(op_c, "log") == 0)
+	{
+		if (arg == 1)
+			opcode = 25;
+		else
+			opcode = -1;
+	}
+	else if (strcmp(op_c, "log10") == 0)
+	{
+		if (arg == 1)
+			opcode = 26;
+		else
+			opcode = -1;
+	}
 	else if (strcmp(op_c, "flopstest") == 0)
 		opcode = -50;
 	else if (strcmp(op_c, "deb") == 0)
@@ -312,6 +326,8 @@ int main(int argc, char *argv[])
 						"asin <number> - Trigonometric function - Arcsine\n"
 						"acos <number> - Trigonometric function - Arccosine\n"
 						"atan <number> - Trigonometric function - Arctangent\n"
+						"log <number> - Natural logarithm\n"
+						"log10 <number> - Base 10 logarithm\n"
 						"flopstest - How fast can your computer do math?\n"
 						"\nMAXIMUM NUMBER PRECISION BEFORE SCIENTIFIC NOTATION IS USED IS 2,500 DIGITS."
 						"\n");
@@ -417,7 +433,7 @@ int main(int argc, char *argv[])
 		num.assign(number);
 		if (num < 0)
 		{
-			cerr << "[AMATH] Error: Invalid argument!" << endl;
+			cerr << "[AMATH-NG] Error: Invalid argument!" << endl;
 		}
 		if (number.find(".") != number.npos)
 		{
@@ -496,15 +512,16 @@ int main(int argc, char *argv[])
 		max.assign(argv[3]);
 		boost::random::random_device r;
 		unsigned long long initnum;
-		char** a;
+		char* a;
 		if (argc == 5)
-			initnum = strtol(argv[4], a, 10);
+			initnum = strtoull(argv[4], &a, 10);
 		else
 			initnum = r();
 		boost::random::mt19937_64 gen(initnum);
 		initnum = 0;
 		boost::random::uniform_int_distribution<cpp_int> distrib(min, max);
 		cout << distrib(gen) << endl;
+		cout << "Seed: " << to_string(initnum) << endl;
 	}
 	else if (opcode == 13)
 	{
@@ -625,6 +642,20 @@ int main(int argc, char *argv[])
 		amath_float c = aexp(num, odt);
 		cout << static_cast<string>(c) << endl;
 	}
+	else if (opcode == 25)
+	{
+		amath_float num;
+		num.assign(argv[2]);
+		amath_float nlog = boost::multiprecision::log(num);
+		cout << static_cast<string>(nlog) << endl;
+	}
+	else if (opcode == 26)
+	{
+		amath_float num;
+		num.assign(argv[2]);
+		amath_float nlog = boost::multiprecision::log10(num);
+		cout << static_cast<string>(nlog) << endl;
+	}
 	else if (opcode == -1)
 	{
 		cerr << "[AMATH-NG] ERR: Review your argument count!" << endl;
@@ -639,7 +670,7 @@ int main(int argc, char *argv[])
 	}
 	else if (opcode == -100)
 	{
-		//Debug code here
+		cout << "[AMATH-NG] Debug mode not yet complete" << endl;
 	}
 	else
 		cerr << "[AMATH-NG] ERR: An unknown error has occurred." << endl;
