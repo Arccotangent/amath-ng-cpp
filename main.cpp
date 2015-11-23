@@ -517,11 +517,12 @@ int main(int argc, char *argv[])
 			initnum = strtoull(argv[4], &a, 10);
 		else
 			initnum = r();
+		argv[4] = "";
 		boost::random::mt19937_64 gen(initnum);
+		cout << "Seed: " << initnum << endl;
 		initnum = 0;
 		boost::random::uniform_int_distribution<cpp_int> distrib(min, max);
 		cout << distrib(gen) << endl;
-		cout << "Seed: " << to_string(initnum) << endl;
 	}
 	else if (opcode == 13)
 	{
@@ -558,7 +559,7 @@ int main(int argc, char *argv[])
 		amath_float neg_vtx_x = anegate(vtx_x);
 		cout << "VERTEX: (" << static_cast<string>(neg_vtx_x) << ", " << static_cast<string>(vtx_y) << ")" << endl;
 		amath_float neg_b;
-		if (b < 0 && a >= 0)
+		if (b < 0)
 			neg_b = b;
 		else
 			neg_b = anegate(b);
@@ -568,7 +569,7 @@ int main(int argc, char *argv[])
 			cout << "VERIFIED - Good vertex." << endl;
 		else
 		{
-			cout << "NOT VERIFIED - Bad vertex. If you can manually verify this vertex (-b / 2a) then please report this error on the GitLab repository." << endl;
+			cout << "NOT VERIFIED - Bad vertex. If you can manually verify this vertex (-b / 2a = vertex x) then please report this error on the GitLab repository. Note that to successfully complete the square, a must be set to 1." << endl;
 			cout << a2 << endl << neg_b << endl << neg_vtx_x << endl;
 		}
 	}
