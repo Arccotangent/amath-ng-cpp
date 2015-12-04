@@ -282,6 +282,20 @@ int getOpCode(unsigned short argcount, string op)
 		else
 			opcode = -1;
 	}
+	else if (strcmp(op_c, "psq") == 0)
+	{
+		if (arg == 1)
+			opcode = 27;
+		else
+			opcode = -1;
+	}
+	else if (strcmp(op_c, "ppwr") == 0)
+	{
+		if (arg == 2)
+			opcode = 28;
+		else
+			opcode = -1;
+	}
 	else if (strcmp(op_c, "flopstest") == 0)
 		opcode = -50;
 	else if (strcmp(op_c, "deb") == 0)
@@ -297,7 +311,7 @@ int main(int argc, char *argv[])
 	{
 		//If an operation is removed, do not delete it, but simply comment it out here.
 		//Unless it is permanently removed
-		fprintf(stderr, "AMath-NG 1.0 - A Command Line Calculator by Arccotangent\n\n"
+		fprintf(stderr, "AMath-NG v17.0.1 - A Command Line Calculator by Arccotangent\n\n"
 						"Usage: amath-ng <operation> <numbers>\n\n"
 						"Valid operations include:\n"
 						"add <2+ numbers> - Add numbers together\n"
@@ -328,7 +342,9 @@ int main(int argc, char *argv[])
 						"atan <number> - Trigonometric function - Arctangent\n"
 						"log <number> - Natural logarithm\n"
 						"log10 <number> - Base 10 logarithm\n"
-						"flopstest - How fast can your computer do math?\n"
+						"psq <amount> - Print AMOUNT perfect squares starting with 1.\n"
+						"ppwr <amount> <exponent> - Print AMOUNT bases to EXPONENT starting with 1.\n"
+						"flopstest - How fast can your computer do math? Computational power is measured in floating point operations per second (FLOP/s)\n"
 						"\nMAXIMUM NUMBER PRECISION BEFORE SCIENTIFIC NOTATION IS USED IS 2,500 DIGITS."
 						"\n");
 		return 1;
@@ -419,6 +435,10 @@ int main(int argc, char *argv[])
 		{
 			cout << "[AMATH-NG] ERR: No real solutions! Discriminant is negative. (Discriminant = " << static_cast<string>(discrim) << ")" << endl;
 			return 1;
+		}
+		else
+		{
+			cout << "Discriminant = " << static_cast<string>(discrim) << endl;
 		}
 		amath_float dsqrt = asqrt(discrim);
 		x1 = (neg_b + dsqrt) / 2 * a;
@@ -511,10 +531,10 @@ int main(int argc, char *argv[])
 		min.assign(argv[2]);
 		max.assign(argv[3]);
 		boost::random::random_device r;
-		unsigned long long initnum;
+		unsigned int initnum;
 		char* a;
 		if (argc == 5)
-			initnum = strtoull(argv[4], &a, 10);
+			initnum = strtol(argv[4], &a, 10);
 		else
 			initnum = r();
 		argv[4] = "";
@@ -656,6 +676,30 @@ int main(int argc, char *argv[])
 		num.assign(argv[2]);
 		amath_float nlog = boost::multiprecision::log10(num);
 		cout << static_cast<string>(nlog) << endl;
+	}
+	else if (opcode == 27)
+	{
+		amath_float amt;
+		amt.assign(argv[2]);
+		amath_float base = 1;
+		for (base = 1; base <= amt; base++)
+		{
+			amath_float pwr = aexp(base, 2);
+			cout << static_cast<string>(pwr) << endl;
+		}
+	}
+	else if (opcode == 28)
+	{
+		amath_float amt;
+		amt.assign(argv[2]);
+		amath_float expo;
+		expo.assign(argv[3]);
+		amath_float base = 1;
+		for (base = 1; base <= amt; base++)
+		{
+			amath_float pwr = aexp(base, expo);
+			cout << static_cast<string>(pwr) << endl;
+		}
 	}
 	else if (opcode == -1)
 	{
