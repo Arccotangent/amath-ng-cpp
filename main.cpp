@@ -296,6 +296,13 @@ int getOpCode(unsigned short argcount, string op)
 		else
 			opcode = -1;
 	}
+	else if (strcmp(op_c, "pcr") == 0)
+	{
+		if (arg == 2)
+			opcode = 29;
+		else
+			opcode = -1;
+	}
 	else if (strcmp(op_c, "flopstest") == 0)
 		opcode = -50;
 	else if (strcmp(op_c, "deb") == 0)
@@ -311,7 +318,7 @@ int main(int argc, char *argv[])
 	{
 		//If an operation is removed, do not delete it, but simply comment it out here.
 		//Unless it is permanently removed
-		fprintf(stderr, "AMath-NG v17.0.1 - A Command Line Calculator by Arccotangent\n\n"
+		fprintf(stderr, "AMath-NG v18.0 - A Command Line Calculator by Arccotangent\n\n"
 						"Usage: amath-ng <operation> <numbers>\n\n"
 						"Valid operations include:\n"
 						"add <2+ numbers> - Add numbers together\n"
@@ -344,6 +351,7 @@ int main(int argc, char *argv[])
 						"log10 <number> - Base 10 logarithm\n"
 						"psq <amount> - Print AMOUNT perfect squares starting with 1.\n"
 						"ppwr <amount> <exponent> - Print AMOUNT bases to EXPONENT starting with 1.\n"
+						"pcr <actual> <experimental> - Calculate percent error\n"
 						"flopstest - How fast can your computer do math? Computational power is measured in floating point operations per second (FLOP/s)\n"
 						"\nMAXIMUM NUMBER PRECISION BEFORE SCIENTIFIC NOTATION IS USED IS 2,500 DIGITS."
 						"\n");
@@ -534,10 +542,13 @@ int main(int argc, char *argv[])
 		unsigned int initnum;
 		char* a;
 		if (argc == 5)
+		{
 			initnum = strtol(argv[4], &a, 10);
+			for (unsigned short i = 0; i < strlen(argv[4]); i++)
+				argv[4][i] = 0x00;
+		}
 		else
 			initnum = r();
-		argv[4] = "";
 		boost::random::mt19937_64 gen(initnum);
 		cout << "Seed: " << initnum << endl;
 		initnum = 0;
@@ -700,6 +711,16 @@ int main(int argc, char *argv[])
 			amath_float pwr = aexp(base, expo);
 			cout << static_cast<string>(pwr) << endl;
 		}
+	}
+	else if (opcode == 29)
+	{
+		amath_float act;
+		amath_float exper;
+		act.assign(argv[2]);
+		exper.assign(argv[3]);
+		amath_float uerr = ((exper - act) / act) * 100;
+		amath_float err = boost::multiprecision::abs(uerr);
+		cout << static_cast<string>(err) << endl;
 	}
 	else if (opcode == -1)
 	{
