@@ -303,6 +303,13 @@ int getOpCode(unsigned short argcount, string op)
 		else
 			opcode = -1;
 	}
+	else if (strcmp(op_c, "cpi") == 0)
+	{
+		if (arg == 4)
+			opcode = 30;
+		else
+			opcode = -1;
+	}
 	else if (strcmp(op_c, "flopstest") == 0)
 		opcode = -50;
 	else if (strcmp(op_c, "deb") == 0)
@@ -318,7 +325,7 @@ int main(int argc, char *argv[])
 	{
 		//If an operation is removed, do not delete it, but simply comment it out here.
 		//Unless it is permanently removed
-		fprintf(stderr, "AMath-NG v18.0 - A Command Line Calculator by Arccotangent\n\n"
+		fprintf(stderr, "AMath-NG v19.0 - A Command Line Calculator by Arccotangent\n\n"
 						"Usage: amath-ng <operation> <numbers>\n\n"
 						"Valid operations include:\n"
 						"add <2+ numbers> - Add numbers together\n"
@@ -352,6 +359,7 @@ int main(int argc, char *argv[])
 						"psq <amount> - Print AMOUNT perfect squares starting with 1.\n"
 						"ppwr <amount> <exponent> - Print AMOUNT bases to EXPONENT starting with 1.\n"
 						"pcr <actual> <experimental> - Calculate percent error\n"
+						"cpi <principal> <%% rate> <compounds per year> <time in years> - Calculate compound interest\n"
 						"flopstest - How fast can your computer do math? Computational power is measured in floating point operations per second (FLOP/s)\n"
 						"\nMAXIMUM NUMBER PRECISION BEFORE SCIENTIFIC NOTATION IS USED IS 2,500 DIGITS."
 						"\n");
@@ -721,6 +729,21 @@ int main(int argc, char *argv[])
 		amath_float uerr = ((exper - act) / act) * 100;
 		amath_float err = boost::multiprecision::abs(uerr);
 		cout << static_cast<string>(err) << endl;
+	}
+	else if (opcode == 30)
+	{
+		amath_float principal, rate, num, time;
+		principal.assign(argv[2]);
+		rate.assign(argv[3]);
+		num.assign(argv[4]);
+		time.assign(argv[5]);
+		rate /= 100;
+		amath_float amt;
+		amath_float ttc = num * time;
+		amath_float urate = (1 + rate) / num;
+		amath_float gfac = aexp(urate, ttc);
+		amt = principal * gfac;
+		cout << static_cast<string>(amt) << endl;
 	}
 	else if (opcode == -1)
 	{
