@@ -1,9 +1,10 @@
-#include <boost/algorithm/string/erase.hpp>
-#include <boost/math/common_factor_rt.hpp>
-#include <boost/multiprecision/cpp_int.hpp>
+//#include <boost/algorithm/string/erase.hpp>
+//#include <boost/math/common_factor_rt.hpp>
+//#include <boost/multiprecision/cpp_int.hpp>
+#include <boost/math/constants/calculate_constants.hpp>
 #include <boost/multiprecision/gmp.hpp>
-#include <boost/multiprecision/miller_rabin.hpp>
-#include <boost/multiprecision/random.hpp>
+//#include <boost/multiprecision/miller_rabin.hpp>
+#include <boost/random.hpp>
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/random_device.hpp>
 #include <cstdio>
@@ -14,6 +15,7 @@ using namespace std;
 using namespace boost::multiprecision;
 using boost::multiprecision::backends::gmp_float;
 typedef number<gmp_float<2500>> amath_float;
+int opcode, args;
 
 amath_float toDegrees(amath_float rad)
 {
@@ -35,10 +37,10 @@ amath_float aexp(amath_float base, amath_float exponent_r)
 	return boost::multiprecision::pow(base, exponent_r);
 }
 
-cpp_int afct(cpp_int num)
+mpz_int afct(mpz_int num)
 {
-	cpp_int result = 1;
-	for (cpp_int i = num; i > 1; i--)
+	mpz_int result = 1;
+	for (mpz_int i = num; i > 1; i--)
 	{
 		result *= i;
 	}
@@ -59,17 +61,12 @@ amath_float asqrt(amath_float num)
 	return res;
 }
 
-cpp_int agcf(cpp_int num1, cpp_int num2)
+mpz_int agcf(mpz_int num1, mpz_int num2)
 {
 	return gcd(num1, num2);
 }
 
-cpp_int alcd(cpp_int num1, cpp_int num2)
-{
-	return lcm(num1, num2);
-}
-
-void afactor(cpp_int num)
+void afactor(mpz_int num)
 {
 	cout << static_cast<string>(num) << ": " << flush;
 	while (num % 2 == 0)
@@ -78,8 +75,8 @@ void afactor(cpp_int num)
 		cout << "2 " << flush;
 	}
 	//num is odd
-	cpp_int sqrt_num = boost::multiprecision::sqrt(num);
-	for (cpp_int z = 3; z <= sqrt_num; z += 2)
+	mpz_int sqrt_num = boost::multiprecision::sqrt(num);
+	for (mpz_int z = 3; z <= sqrt_num; z += 2)
 	{
 		while (num % z == 0)
 		{
@@ -98,215 +95,224 @@ void afactor(cpp_int num)
 int getOpCode(unsigned short argcount, string op)
 {
 	const char* op_c = op.c_str();
-	int opcode, arg;
-	arg = argcount - 2;
+	args = argcount - 2;
 	if (strcmp(op_c, "add") == 0)
 	{
-		if (arg >= 2)
+		if (args >= 2)
 			opcode = 1;
 		else
 			opcode = -1;
 	}
 	else if (strcmp(op_c, "sub") == 0)
 	{
-		if (arg >= 2)
+		if (args >= 2)
 			opcode = 2;
 		else
 			opcode = -1;
 	}
 	else if (strcmp(op_c, "mul") == 0)
 	{
-		if (arg >= 2)
+		if (args >= 2)
 			opcode = 3;
 		else
 			opcode = -1;
 	}
 	else if (strcmp(op_c, "div") == 0)
 	{
-		if (arg >= 2)
+		if (args >= 2)
 			opcode = 4;
 		else
 			opcode = -1;
 	}
 	else if (strcmp(op_c, "exp") == 0)
 	{
-		if (arg == 2)
+		if (args == 2)
 			opcode = 5;
 		else
 			opcode = -1;
 	}
 	else if (strcmp(op_c, "sqrt") == 0)
 	{
-		if (arg == 1)
+		if (args == 1)
 			opcode = 6;
 		else
 			opcode = -1;
 	}
 	else if (strcmp(op_c, "qdr") == 0)
 	{
-		if (arg == 3)
+		if (args == 3)
 			opcode = 7;
 		else
 			opcode = -1;
 	}
 	else if (strcmp(op_c, "sf") == 0)
 	{
-		if (arg == 1)
+		if (args == 1)
 			opcode = 8;
 		else
 			opcode = -1;
 	}
 	else if (strcmp(op_c, "aoc") == 0)
 	{
-		if (arg == 1)
+		if (args == 1)
 			opcode = 9;
 		else
 			opcode = -1;
 	}
 	else if (strcmp(op_c, "mod") == 0)
 	{
-		if (arg == 2)
+		if (args == 2)
 			opcode = 10;
 		else
 			opcode = -1;
 	}
 	else if (strcmp(op_c, "prm") == 0)
 	{
-		if (arg == 1)
+		opcode = 11;
+		/*
+		if (args == 1)
 			opcode = 11;
 		else
 			opcode = -1;
+		*/
 	}
 	else if (strcmp(op_c, "rand") == 0)
 	{
-		if (arg == 2 || arg == 3)
+		if (args == 2 || args == 3)
 			opcode = 12;
 		else
 			opcode = -1;
 	}
 	else if (strcmp(op_c, "fac") == 0)
 	{
-		if (arg == 1)
+		if (args == 1)
 			opcode = 13;
 		else
 			opcode = -1;
 	}
 	else if (strcmp(op_c, "gcf") == 0)
 	{
-		if (arg >= 2)
+		if (args >= 2)
 			opcode = 14;
 		else
 			opcode = -1;
 	}
 	else if (strcmp(op_c, "vtx") == 0)
 	{
-		if (arg == 3)
+		if (args == 3)
 			opcode = 15;
 		else
 			opcode = -1;
 	}
 	else if (strcmp(op_c, "hypot") == 0)
 	{
-		if (arg == 2)
+		if (args == 2)
 			opcode = 16;
 		else
 			opcode = -1;
 	}
 	else if (strcmp(op_c, "fct") == 0)
 	{
-		if (arg == 1)
+		if (args == 1)
 			opcode = 17;
 		else
 			opcode = -1;
 	}
 	else if (strcmp(op_c, "sin") == 0)
 	{
-		if (arg == 1)
+		if (args == 1)
 			opcode = 18;
 		else
 			opcode = -1;
 	}
 	else if (strcmp(op_c, "cos") == 0)
 	{
-		if (arg == 1)
+		if (args == 1)
 			opcode = 19;
 		else
 			opcode = -1;
 	}
 	else if (strcmp(op_c, "tan") == 0)
 	{
-		if (arg == 1)
+		if (args == 1)
 			opcode = 20;
 		else
 			opcode = -1;
 	}
 	else if (strcmp(op_c, "asin") == 0)
 	{
-		if (arg == 1)
+		if (args == 1)
 			opcode = 21;
 		else
 			opcode = -1;
 	}
 	else if (strcmp(op_c, "acos") == 0)
 	{
-		if (arg == 1)
+		if (args == 1)
 			opcode = 22;
 		else
 			opcode = -1;
 	}
 	else if (strcmp(op_c, "atan") == 0)
 	{
-		if (arg == 1)
+		if (args == 1)
 			opcode = 23;
 		else
 			opcode = -1;
 	}
 	else if (strcmp(op_c, "cbrt") == 0)
 	{
-		if (arg == 1)
+		if (args == 1)
 			opcode = 24;
 		else
 			opcode = -1;
 	}
 	else if (strcmp(op_c, "log") == 0)
 	{
-		if (arg == 1)
+		if (args == 1)
 			opcode = 25;
 		else
 			opcode = -1;
 	}
 	else if (strcmp(op_c, "log10") == 0)
 	{
-		if (arg == 1)
+		if (args == 1)
 			opcode = 26;
 		else
 			opcode = -1;
 	}
 	else if (strcmp(op_c, "psq") == 0)
 	{
-		if (arg == 1)
+		if (args == 1)
 			opcode = 27;
 		else
 			opcode = -1;
 	}
 	else if (strcmp(op_c, "ppwr") == 0)
 	{
-		if (arg == 2)
+		if (args == 2)
 			opcode = 28;
 		else
 			opcode = -1;
 	}
 	else if (strcmp(op_c, "pcr") == 0)
 	{
-		if (arg == 2)
+		if (args == 2)
 			opcode = 29;
 		else
 			opcode = -1;
 	}
 	else if (strcmp(op_c, "cpi") == 0)
 	{
-		if (arg == 4)
+		if (args == 4)
 			opcode = 30;
+		else
+			opcode = -1;
+	}
+	else if (strcmp(op_c, "avg") == 0)
+	{
+		if (args >= 2)
+			opcode = 31;
 		else
 			opcode = -1;
 	}
@@ -325,7 +331,7 @@ int main(int argc, char *argv[])
 	{
 		//If an operation is removed, do not delete it, but simply comment it out here.
 		//Unless it is permanently removed
-		fprintf(stderr, "AMath-NG v19.0 - A Command Line Calculator by Arccotangent\n\n"
+		fprintf(stderr, "AMath-NG v20.0 - A Command Line Calculator by Arccotangent\n\n"
 						"Usage: amath-ng <operation> <numbers>\n\n"
 						"Valid operations include:\n"
 						"add <2+ numbers> - Add numbers together\n"
@@ -342,7 +348,7 @@ int main(int argc, char *argv[])
 						//"lcd <2 numbers> - Get LCD of 2 numbers\n"
 						"rand <min> <max> [seed] - Generate random integer between MIN and MAX with optional SEED\n"
 						"aoc <radius> - Calculate approximate area of circle\n"
-						"prm <number> - Test if number is prime\n"
+						"prm <number> - Test if number is prime [TEMPORARILY REMOVED]\n"
 						"fac <number> - Get prime factors of number\n"
 						"vtx <a> <b> <c> - Get vertex of quadratic equation equal to y OR 0\n"
 						//"dst <x1> <y1> <x2> <y2> - Get distance between 2 points\n"
@@ -360,6 +366,7 @@ int main(int argc, char *argv[])
 						"ppwr <amount> <exponent> - Print AMOUNT bases to EXPONENT starting with 1.\n"
 						"pcr <actual> <experimental> - Calculate percent error\n"
 						"cpi <principal> <%% rate> <compounds per year> <time in years> - Calculate compound interest\n"
+						"avg <numbers> - Calculate average of numbers\n"
 						"flopstest - How fast can your computer do math? Computational power is measured in floating point operations per second (FLOP/s)\n"
 						"\nMAXIMUM NUMBER PRECISION BEFORE SCIENTIFIC NOTATION IS USED IS 2,500 DIGITS."
 						"\n");
@@ -473,7 +480,7 @@ int main(int argc, char *argv[])
 		}
 		if (number.find(".") != number.npos)
 		{
-			boost::algorithm::erase_all(number, ".");
+			number.erase(remove(number.begin(), number.end(), '.'), number.end());
 			size_t fnz = number.find_first_not_of("0");
 			string sf = number.substr(fnz, number.npos);
 			cout << sf << endl;
@@ -500,16 +507,17 @@ int main(int argc, char *argv[])
 	}
 	else if (opcode == 10)
 	{
-		cpp_int num1;
-		cpp_int num2;
+		mpz_int num1;
+		mpz_int num2;
 		num1.assign(argv[2]);
 		num2.assign(argv[3]);
-		cpp_int res = num1 % num2;
+		mpz_int res = num1 % num2;
 		cout << res << endl;
 	}
 	else if (opcode == 11)
 	{
-		cpp_int prm;
+		/*
+		mpz_int prm;
 		prm.assign(argv[2]);
 		boost::random::mt19937 gen2(clock());
 		if (miller_rabin_test(prm, 25, gen2))
@@ -539,11 +547,13 @@ int main(int argc, char *argv[])
 		{
 			cout << "Number is not prime." << endl;
 		}
+		*/
+		cerr << "Prime operation temporarily removed." << endl;
 	}
 	else if (opcode == 12)
 	{
-		cpp_int min;
-		cpp_int max;
+		mpz_int min;
+		mpz_int max;
 		min.assign(argv[2]);
 		max.assign(argv[3]);
 		boost::random::random_device r;
@@ -560,22 +570,22 @@ int main(int argc, char *argv[])
 		boost::random::mt19937_64 gen(initnum);
 		cout << "Seed: " << initnum << endl;
 		initnum = 0;
-		boost::random::uniform_int_distribution<cpp_int> distrib(min, max);
+		boost::random::uniform_int_distribution<mpz_int> distrib(min, max);
 		cout << distrib(gen) << endl;
 	}
 	else if (opcode == 13)
 	{
-		cpp_int num;
+		mpz_int num;
 		num.assign(argv[2]);
 		afactor(num);
 	}
 	else if (opcode == 14)
 	{
-		cpp_int num1;
-		cpp_int num2;
+		mpz_int num1;
+		mpz_int num2;
 		num1.assign(argv[2]);
 		num2.assign(argv[3]);
-		cpp_int gcf = agcf(num1, num2);
+		mpz_int gcf = agcf(num1, num2);
 		cout << static_cast<string>(gcf) << endl;
 	}
 	else if (opcode == 15)
@@ -591,16 +601,20 @@ int main(int argc, char *argv[])
 		b2 /= 2;
 		amath_float cs = aexp(b2, 2);
 		//End side work
+		//c /= a;
 		amath_float neg_cs = anegate(cs);
-		amath_float vtx_y = c + neg_cs;
+		amath_float vtx_y = c + neg_cs; //balance equation
 		amath_float vtx_x = sqrt(cs);
+		if (b < 0)
+			vtx_x = anegate(vtx_x); //"Drop" minus sign if b is negative
 		cout << "VERTEX FORM: y = (x + " << static_cast<string>(vtx_x) << ")² + " << static_cast<string>(vtx_y) <<  endl;
 		amath_float neg_vtx_x = anegate(vtx_x);
+		//amath_float neg_vtx_x = vtx_x;
 		cout << "VERTEX: (" << static_cast<string>(neg_vtx_x) << ", " << static_cast<string>(vtx_y) << ")" << endl;
 		amath_float neg_b;
-		if (b < 0)
-			neg_b = b;
-		else
+		//if (b < 0)
+		//	neg_b = b;
+		//else
 			neg_b = anegate(b);
 		amath_float a2 = a * 2;
 		amath_float vtx_x_verify = neg_b / a2;
@@ -608,7 +622,7 @@ int main(int argc, char *argv[])
 			cout << "VERIFIED - Good vertex." << endl;
 		else
 		{
-			cout << "NOT VERIFIED - Bad vertex. If you can manually verify this vertex (-b / 2a = vertex x) then please report this error on the GitLab repository. Note that to successfully complete the square, a must be set to 1." << endl;
+			cout << "NOT VERIFIED - Bad vertex. If you can manually verify this vertex (-b / 2a = vertex x) then please report this error on the GitLab repository." << endl;
 			cout << a2 << endl << neg_b << endl << neg_vtx_x << endl;
 		}
 	}
@@ -625,9 +639,9 @@ int main(int argc, char *argv[])
 	}
 	else if (opcode == 17)
 	{
-		cpp_int num;
+		mpz_int num;
 		num.assign(argv[2]);
-		cpp_int fac = afct(num);
+		mpz_int fac = afct(num);
 		cout << static_cast<string>(fac) << endl;
 	}
 	else if (opcode == 18)
@@ -744,6 +758,20 @@ int main(int argc, char *argv[])
 		amath_float gfac = aexp(urate, ttc);
 		amt = principal * gfac;
 		cout << static_cast<string>(amt) << endl;
+	}
+	else if (opcode == 31)
+	{
+		amath_float result = 0;
+		unsigned int argcount = argc - 2;
+		for (unsigned int i = 0; i < argcount; i++)
+		{
+			amath_float addend;
+			addend.assign(argv[i + 2]);
+			result += addend;
+		}
+		amath_float acount = argcount;
+		result /= acount;
+		cout << static_cast<string>(result) << endl;
 	}
 	else if (opcode == -1)
 	{
