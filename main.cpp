@@ -1,7 +1,6 @@
 //#include <boost/algorithm/string/erase.hpp>
 //#include <boost/math/common_factor_rt.hpp>
 //#include <boost/multiprecision/cpp_int.hpp>
-#include <boost/math/constants/calculate_constants.hpp>
 #include <boost/multiprecision/gmp.hpp>
 //#include <boost/multiprecision/miller_rabin.hpp>
 #include <boost/random.hpp>
@@ -316,6 +315,13 @@ int getOpCode(unsigned short argcount, string op)
 		else
 			opcode = -1;
 	}
+	else if (strcmp(op_c, "stdev") == 0)
+	{
+		if (args >= 2)
+			opcode = 32;
+		else
+			opcode = -1;
+	}
 	else if (strcmp(op_c, "flopstest") == 0)
 		opcode = -50;
 	else if (strcmp(op_c, "deb") == 0)
@@ -367,6 +373,7 @@ int main(int argc, char *argv[])
 						"pcr <actual> <experimental> - Calculate percent error\n"
 						"cpi <principal> <%% rate> <compounds per year> <time in years> - Calculate compound interest\n"
 						"avg <numbers> - Calculate average of numbers\n"
+						"stdev <numbers> - Calculate standard deviation of numbers\n"
 						"flopstest - How fast can your computer do math? Computational power is measured in floating point operations per second (FLOP/s)\n"
 						"\nMAXIMUM NUMBER PRECISION BEFORE SCIENTIFIC NOTATION IS USED IS 2,500 DIGITS."
 						"\n");
@@ -772,6 +779,30 @@ int main(int argc, char *argv[])
 		amath_float acount = argcount;
 		result /= acount;
 		cout << static_cast<string>(result) << endl;
+	}
+	else if (opcode == 32)
+	{
+		amath_float total = 0;
+		unsigned int argcount = argc - 2;
+		for (unsigned int i = 0; i < argcount; i++)
+		{
+			amath_float addend;
+			addend.assign(argv[i + 2]);
+			total += addend;
+		}
+		amath_float acount = argcount;
+		amath_float avg = total / acount;
+		amath_float variance;
+		for (unsigned int i = 0; i < argcount; i++)
+		{
+			amath_float data;
+			data.assign(argv[i + 2]);
+			amath_float dfm = data - avg;
+			variance += aexp(dfm, 2);
+		}
+		variance /= acount;
+		amath_float stdev = asqrt(variance);
+		cout << static_cast<string>(stdev) << endl;
 	}
 	else if (opcode == -1)
 	{
