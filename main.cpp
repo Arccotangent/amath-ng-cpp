@@ -10,334 +10,19 @@
 #include <iostream>
 #include <cstdlib>
 #include "flopstest.hpp"
+#include "amath-ng.hpp"
+#include "opcode.hpp"
 using namespace std;
 using namespace boost::multiprecision;
 using boost::multiprecision::backends::gmp_float;
-typedef number<gmp_float<2500>> amath_float;
-int opcode, args;
 
-amath_float toDegrees(amath_float rad)
-{
-	return rad * (180 / 3.14159265358979323846264338);
-}
-
-amath_float toRadians(amath_float deg)
-{
-	return deg * (3.14159265358979323846264338 / 180);
-}
-
-void printAns(amath_float ans)
-{
-	cout << std::setprecision(std::numeric_limits<amath_float>::max_digits10) << flush << static_cast<string>(ans) << endl << flush;
-}
-
-amath_float aexp(amath_float base, amath_float exponent_r)
-{
-	return boost::multiprecision::pow(base, exponent_r);
-}
-
-mpz_int afct(mpz_int num)
-{
-	mpz_int result = 1;
-	for (mpz_int i = num; i > 1; i--)
-	{
-		result *= i;
-	}
-	return result;
-}
-
-amath_float anegate(amath_float num)
-{
-	amath_float onum = num;
-	num -= onum;
-	num -= onum;
-	return num;
-}
-
-amath_float asqrt(amath_float num)
-{
-	amath_float res(boost::multiprecision::sqrt(num));
-	return res;
-}
-
-mpz_int agcf(mpz_int num1, mpz_int num2)
-{
-	return gcd(num1, num2);
-}
-
-void afactor(mpz_int num)
-{
-	cout << static_cast<string>(num) << ": " << flush;
-	while (num % 2 == 0)
-	{
-		num /= 2;
-		cout << "2 " << flush;
-	}
-	//num is odd
-	mpz_int sqrt_num = boost::multiprecision::sqrt(num);
-	for (mpz_int z = 3; z <= sqrt_num; z += 2)
-	{
-		while (num % z == 0)
-		{
-			num /= z;
-			cout << z << " " << flush;
-		}
-	}
-
-	if (num > 2)
-	{
-		cout << num;
-	}
-	cout << endl;
-}
-
-int getOpCode(unsigned short argcount, string op)
-{
-	const char* op_c = op.c_str();
-	args = argcount - 2;
-	if (strcmp(op_c, "add") == 0)
-	{
-		if (args >= 2)
-			opcode = 1;
-		else
-			opcode = -1;
-	}
-	else if (strcmp(op_c, "sub") == 0)
-	{
-		if (args >= 2)
-			opcode = 2;
-		else
-			opcode = -1;
-	}
-	else if (strcmp(op_c, "mul") == 0)
-	{
-		if (args >= 2)
-			opcode = 3;
-		else
-			opcode = -1;
-	}
-	else if (strcmp(op_c, "div") == 0)
-	{
-		if (args >= 2)
-			opcode = 4;
-		else
-			opcode = -1;
-	}
-	else if (strcmp(op_c, "exp") == 0)
-	{
-		if (args == 2)
-			opcode = 5;
-		else
-			opcode = -1;
-	}
-	else if (strcmp(op_c, "sqrt") == 0)
-	{
-		if (args == 1)
-			opcode = 6;
-		else
-			opcode = -1;
-	}
-	else if (strcmp(op_c, "qdr") == 0)
-	{
-		if (args == 3)
-			opcode = 7;
-		else
-			opcode = -1;
-	}
-	else if (strcmp(op_c, "sf") == 0)
-	{
-		if (args == 1)
-			opcode = 8;
-		else
-			opcode = -1;
-	}
-	else if (strcmp(op_c, "aoc") == 0)
-	{
-		if (args == 1)
-			opcode = 9;
-		else
-			opcode = -1;
-	}
-	else if (strcmp(op_c, "mod") == 0)
-	{
-		if (args == 2)
-			opcode = 10;
-		else
-			opcode = -1;
-	}
-	else if (strcmp(op_c, "prm") == 0)
-	{
-		opcode = 11;
-		/*
-		if (args == 1)
-			opcode = 11;
-		else
-			opcode = -1;
-		*/
-	}
-	else if (strcmp(op_c, "rand") == 0)
-	{
-		if (args == 2 || args == 3)
-			opcode = 12;
-		else
-			opcode = -1;
-	}
-	else if (strcmp(op_c, "fac") == 0)
-	{
-		if (args == 1)
-			opcode = 13;
-		else
-			opcode = -1;
-	}
-	else if (strcmp(op_c, "gcf") == 0)
-	{
-		if (args >= 2)
-			opcode = 14;
-		else
-			opcode = -1;
-	}
-	else if (strcmp(op_c, "vtx") == 0)
-	{
-		if (args == 3)
-			opcode = 15;
-		else
-			opcode = -1;
-	}
-	else if (strcmp(op_c, "hypot") == 0)
-	{
-		if (args == 2)
-			opcode = 16;
-		else
-			opcode = -1;
-	}
-	else if (strcmp(op_c, "fct") == 0)
-	{
-		if (args == 1)
-			opcode = 17;
-		else
-			opcode = -1;
-	}
-	else if (strcmp(op_c, "sin") == 0)
-	{
-		if (args == 1)
-			opcode = 18;
-		else
-			opcode = -1;
-	}
-	else if (strcmp(op_c, "cos") == 0)
-	{
-		if (args == 1)
-			opcode = 19;
-		else
-			opcode = -1;
-	}
-	else if (strcmp(op_c, "tan") == 0)
-	{
-		if (args == 1)
-			opcode = 20;
-		else
-			opcode = -1;
-	}
-	else if (strcmp(op_c, "asin") == 0)
-	{
-		if (args == 1)
-			opcode = 21;
-		else
-			opcode = -1;
-	}
-	else if (strcmp(op_c, "acos") == 0)
-	{
-		if (args == 1)
-			opcode = 22;
-		else
-			opcode = -1;
-	}
-	else if (strcmp(op_c, "atan") == 0)
-	{
-		if (args == 1)
-			opcode = 23;
-		else
-			opcode = -1;
-	}
-	else if (strcmp(op_c, "cbrt") == 0)
-	{
-		if (args == 1)
-			opcode = 24;
-		else
-			opcode = -1;
-	}
-	else if (strcmp(op_c, "log") == 0)
-	{
-		if (args == 1)
-			opcode = 25;
-		else
-			opcode = -1;
-	}
-	else if (strcmp(op_c, "log10") == 0)
-	{
-		if (args == 1)
-			opcode = 26;
-		else
-			opcode = -1;
-	}
-	else if (strcmp(op_c, "psq") == 0)
-	{
-		if (args == 1)
-			opcode = 27;
-		else
-			opcode = -1;
-	}
-	else if (strcmp(op_c, "ppwr") == 0)
-	{
-		if (args == 2)
-			opcode = 28;
-		else
-			opcode = -1;
-	}
-	else if (strcmp(op_c, "pcr") == 0)
-	{
-		if (args == 2)
-			opcode = 29;
-		else
-			opcode = -1;
-	}
-	else if (strcmp(op_c, "cpi") == 0)
-	{
-		if (args == 4)
-			opcode = 30;
-		else
-			opcode = -1;
-	}
-	else if (strcmp(op_c, "avg") == 0)
-	{
-		if (args >= 2)
-			opcode = 31;
-		else
-			opcode = -1;
-	}
-	else if (strcmp(op_c, "stdev") == 0)
-	{
-		if (args >= 2)
-			opcode = 32;
-		else
-			opcode = -1;
-	}
-	else if (strcmp(op_c, "flopstest") == 0)
-		opcode = -50;
-	else if (strcmp(op_c, "deb") == 0)
-		opcode = -100;
-	else
-		opcode = -2;
-	return opcode;
-}
-
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
 	if (argc < 2)
 	{
 		//If an operation is removed, do not delete it, but simply comment it out here.
 		//Unless it is permanently removed
-		fprintf(stderr, "AMath-NG v20.0 - A Command Line Calculator by Arccotangent\n\n"
+		fprintf(stderr, "AMath-NG v20.0.1 - A Command Line Calculator by Arccotangent\n\n"
 						"Usage: amath-ng <operation> <numbers>\n\n"
 						"Valid operations include:\n"
 						"add <2+ numbers> - Add numbers together\n"
@@ -391,7 +76,7 @@ int main(int argc, char *argv[])
 			addend.assign(argv[i + 2]);
 			result += addend;
 		}
-		printAns(result);
+		cout << static_cast<string>(result) << endl;
 	}
 	else if (opcode == 2)
 	{
@@ -404,7 +89,7 @@ int main(int argc, char *argv[])
 			subtrahend.assign(argv[i + 3]);
 			result -= subtrahend;
 		}
-		printAns(result);
+		cout << static_cast<string>(result) << endl;
 	}
 	else if (opcode == 3)
 	{
@@ -416,7 +101,7 @@ int main(int argc, char *argv[])
 			multiplicand.assign(argv[i + 2]);
 			result *= multiplicand;
 		}
-		printAns(result);
+		cout << static_cast<string>(result) << endl;
 	}
 	else if (opcode == 4)
 	{
@@ -429,7 +114,7 @@ int main(int argc, char *argv[])
 			divisor.assign(argv[i + 3]);
 			result /= divisor;
 		}
-		printAns(result);
+		cout << static_cast<string>(result) << endl;
 	}
 	else if (opcode == 5)
 	{
@@ -438,14 +123,14 @@ int main(int argc, char *argv[])
 		amath_float e;
 		e.assign(argv[3]);
 		amath_float result = aexp(b, e);
-		printAns(result);
+		cout << static_cast<string>(result) << endl;
 	}
 	else if (opcode == 6)
 	{
 		amath_float num;
 		num.assign(argv[2]);
 		amath_float result = asqrt(num);
-		printAns(result);
+		cout << static_cast<string>(result) << endl;
 	}
 	else if (opcode == 7)
 	{
@@ -519,7 +204,7 @@ int main(int argc, char *argv[])
 		num1.assign(argv[2]);
 		num2.assign(argv[3]);
 		mpz_int res = num1 % num2;
-		cout << res << endl;
+		cout << static_cast<string>(res) << endl;
 	}
 	else if (opcode == 11)
 	{

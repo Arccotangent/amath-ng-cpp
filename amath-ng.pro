@@ -36,4 +36,6 @@ DISTFILES += \
     README.md
 
 HEADERS += \
-    flopstest.hpp
+    flopstest.hpp \
+    amath-ng.hpp \
+    opcode.hpp
