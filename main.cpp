@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
 	{
 		//If an operation is removed, do not delete it, but simply comment it out here.
 		//Unless it is permanently removed
-		fprintf(stderr, "AMath-NG v20.0.1 - A Command Line Calculator by Arccotangent\n\n"
+		fprintf(stderr, "AMath-NG v21.0 - A Command Line Calculator by Arccotangent\n\n"
 						"Usage: amath-ng <operation> <numbers>\n\n"
 						"Valid operations include:\n"
 						"add <2+ numbers> - Add numbers together\n"
@@ -59,6 +59,7 @@ int main(int argc, char* argv[])
 						"cpi <principal> <%% rate> <compounds per year> <time in years> - Calculate compound interest\n"
 						"avg <numbers> - Calculate average of numbers\n"
 						"stdev <numbers> - Calculate standard deviation of numbers\n"
+						"zsc <data> <mean> <standard deviation> - Get z-score of a number\n"
 						"flopstest - How fast can your computer do math? Computational power is measured in floating point operations per second (FLOP/s)\n"
 						"\nMAXIMUM NUMBER PRECISION BEFORE SCIENTIFIC NOTATION IS USED IS 2,500 DIGITS."
 						"\n");
@@ -488,6 +489,16 @@ int main(int argc, char* argv[])
 		variance /= acount;
 		amath_float stdev = asqrt(variance);
 		cout << static_cast<string>(stdev) << endl;
+	}
+	else if (opcode == 33)
+	{
+		amath_float data, mean, stdev;
+		data.assign(argv[2]);
+		mean.assign(argv[3]);
+		stdev.assign(argv[4]);
+		amath_float zscore = data - mean;
+		zscore /= stdev;
+		cout << static_cast<string>(zscore) << endl;
 	}
 	else if (opcode == -1)
 	{
