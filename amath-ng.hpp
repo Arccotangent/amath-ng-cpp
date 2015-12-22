@@ -1,9 +1,31 @@
 #ifndef AMATHNG_HPP
 #define AMATHNG_HPP
+#define VERSION "v23.0"
 #include <boost/multiprecision/gmp.hpp>
 using namespace boost::multiprecision;
 using boost::multiprecision::backends::gmp_float;
 typedef number<gmp_float<2500>> amath_float;
+
+bool asort(double num1, double num2)
+{
+	return (num1 < num2);
+}
+
+amath_float amax(amath_float num1, amath_float num2)
+{
+	if (num1 > num2)
+		return num1;
+	else
+		return num2;
+}
+
+amath_float amin(amath_float num1, amath_float num2)
+{
+	if (num1 < num2)
+		return num1;
+	else
+		return num2;
+}
 
 amath_float toDegrees(amath_float rad)
 {

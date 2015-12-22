@@ -6,23 +6,35 @@
 #include <boost/random.hpp>
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/random_device.hpp>
+#include <boost/sort/sort.hpp>
 #include <cstdio>
 #include <iostream>
 #include <cstdlib>
+#include <algorithm>
+#include <vector>
 #include "flopstest.hpp"
 #include "amath-ng.hpp"
 #include "opcode.hpp"
+#ifndef AMATHNG_HPP
+#error "You need amath-ng.hpp to compile amath-ng!"
+#endif
+#ifndef FLOPSTEST_HPP
+#error "You need flopstest.hpp to compile amath-ng!"
+#endif
+#ifndef OPCODE_HPP
+#error "You need opcode.hpp to compile amath-ng!"
+#endif
 using namespace std;
 using namespace boost::multiprecision;
 using boost::multiprecision::backends::gmp_float;
 
-int main(int argc, char* argv[])
+int main(const int argc, char* argv[])
 {
 	if (argc < 2)
 	{
 		//If an operation is removed, do not delete it, but simply comment it out here.
 		//Unless it is permanently removed
-		fprintf(stderr, "AMath-NG v21.0 - A Command Line Calculator by Arccotangent\n\n"
+		fprintf(stderr, "AMath-NG %s - A Command Line Calculator by Arccotangent\n\n"
 						"Usage: amath-ng <operation> <numbers>\n\n"
 						"Valid operations include:\n"
 						"add <2+ numbers> - Add numbers together\n"
@@ -60,9 +72,10 @@ int main(int argc, char* argv[])
 						"avg <numbers> - Calculate average of numbers\n"
 						"stdev <numbers> - Calculate standard deviation of numbers\n"
 						"zsc <data> <mean> <standard deviation> - Get z-score of a number\n"
+						"ord <numbers> - Order numbers smallest to greatest\n"
 						"flopstest - How fast can your computer do math? Computational power is measured in floating point operations per second (FLOP/s)\n"
 						"\nMAXIMUM NUMBER PRECISION BEFORE SCIENTIFIC NOTATION IS USED IS 2,500 DIGITS."
-						"\n");
+						"\n", VERSION);
 		return 1;
 	}
 	cout << std::setprecision(std::numeric_limits<amath_float>::max_digits10) << flush;
@@ -499,6 +512,21 @@ int main(int argc, char* argv[])
 		amath_float zscore = data - mean;
 		zscore /= stdev;
 		cout << static_cast<string>(zscore) << endl;
+	}
+	else if (opcode == 34)
+	{
+		double udata[argc - 2];
+		char* a;
+		for (int i = 0; i < argc - 2; i++)
+		{
+			string argt = argv[i + 2];
+			udata[i] = strtod(argt.c_str(), &a);
+		}
+		std::vector<double> uvector(udata, udata + argc - 2);
+		std::sort(uvector.begin(), uvector.end(), asort);
+		for (vector<double>::iterator it=uvector.begin(); it!=uvector.end(); ++it)
+			cout << *it << " ";
+		cout << endl;
 	}
 	else if (opcode == -1)
 	{
