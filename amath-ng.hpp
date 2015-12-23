@@ -1,14 +1,19 @@
 #ifndef AMATHNG_HPP
 #define AMATHNG_HPP
-#define VERSION "v23.0"
+#define VERSION "v23.1"
 #include <boost/multiprecision/gmp.hpp>
+#include <boost/sort/sort.hpp>
 using namespace boost::multiprecision;
 using boost::multiprecision::backends::gmp_float;
 typedef number<gmp_float<2500>> amath_float;
 
-bool asort(double num1, double num2)
+amath_float* numsort(amath_float num_array[], const unsigned int num_ele)
 {
-	return (num1 < num2);
+	std::vector<amath_float> uvector(num_array, num_array + num_ele);
+	boost::sort::spreadsort::float_sort(uvector.begin(), uvector.end());
+	amath_float* sorted = (amath_float*) malloc(sizeof(amath_float) * num_ele);
+	std::copy(uvector.begin(), uvector.end(), sorted);
+	return sorted;
 }
 
 amath_float amax(amath_float num1, amath_float num2)

@@ -6,7 +6,7 @@
 #include <boost/random.hpp>
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/random_device.hpp>
-#include <boost/sort/sort.hpp>
+#include <boost/array.hpp>
 #include <cstdio>
 #include <iostream>
 #include <cstdlib>
@@ -515,17 +515,16 @@ int main(const int argc, char* argv[])
 	}
 	else if (opcode == 34)
 	{
-		double udata[argc - 2];
-		char* a;
+		amath_float udata[argc - 2];
 		for (int i = 0; i < argc - 2; i++)
 		{
-			string argt = argv[i + 2];
-			udata[i] = strtod(argt.c_str(), &a);
+			amath_float dbuf;
+			dbuf.assign(argv[i + 2]);
+			udata[i] = dbuf;
 		}
-		std::vector<double> uvector(udata, udata + argc - 2);
-		std::sort(uvector.begin(), uvector.end(), asort);
-		for (vector<double>::iterator it=uvector.begin(); it!=uvector.end(); ++it)
-			cout << *it << " ";
+		amath_float* sorted = numsort(udata, argc - 2);
+		for (int i = 0; i < argc - 2; i++)
+			cout << static_cast<string>(sorted[i]) << " ";
 		cout << endl;
 	}
 	else if (opcode == -1)
