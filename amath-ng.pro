@@ -37,5 +37,5 @@ DISTFILES += \
 
 HEADERS += \
     flopstest.hpp \
-    amath-ng.hpp \
-    opcode.hpp
+    opcode.hpp \
+    acalc-ng.hpp

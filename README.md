@@ -1,5 +1,5 @@
-amath-ng
-========
+amath-ng --> acalc-ng
+=====================
 
 A command line calculator for elementary and algebraic use, and more to come.
 
@@ -14,7 +14,9 @@ GMP C
 
 This project uses the C++14 standard.
 
-Build by running this command in a Unix terminal:
-g++ -o amath-ng main.cpp -lgmp -lboost_random -lboost_thread -lboost_system -std=c++1y
+Build by running the Makefile
 
-You can also build in Qt Creator by importing the project from this repository.
+PROJECT MOVED
+-------------
+
+Newer versions can be found in the acalc-ng repository.
