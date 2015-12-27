@@ -1,23 +1,24 @@
-#ifndef ACALCNG_HPP
-#define ACALCNG_HPP
+#ifndef AMATHNG_HPP
+#define AMATHNG_HPP
+#define VERSION "v24.0"
 #include <boost/multiprecision/gmp.hpp>
 #include <boost/sort/sort.hpp>
 #include <iostream>
 using namespace std;
 using namespace boost::multiprecision;
 using boost::multiprecision::backends::gmp_float;
-typedef number<gmp_float<2500>> acalc_float;
+typedef number<gmp_float<2500>> amath_float;
 
-acalc_float* numsort(acalc_float num_array[], const unsigned int num_ele)
+amath_float* numsort(amath_float num_array[], const unsigned int num_ele)
 {
-	std::vector<acalc_float> uvector(num_array, num_array + num_ele);
+	std::vector<amath_float> uvector(num_array, num_array + num_ele);
 	boost::sort::spreadsort::float_sort(uvector.begin(), uvector.end());
-	acalc_float* sorted = (acalc_float*) malloc(sizeof(acalc_float) * num_ele);
+	amath_float* sorted = (amath_float*) malloc(sizeof(amath_float) * num_ele);
 	std::copy(uvector.begin(), uvector.end(), sorted);
 	return sorted;
 }
 
-acalc_float amax(acalc_float num1, acalc_float num2)
+amath_float amax(amath_float num1, amath_float num2)
 {
 	if (num1 > num2)
 		return num1;
@@ -25,7 +26,7 @@ acalc_float amax(acalc_float num1, acalc_float num2)
 		return num2;
 }
 
-acalc_float amin(acalc_float num1, acalc_float num2)
+amath_float amin(amath_float num1, amath_float num2)
 {
 	if (num1 < num2)
 		return num1;
@@ -33,17 +34,17 @@ acalc_float amin(acalc_float num1, acalc_float num2)
 		return num2;
 }
 
-acalc_float toDegrees(acalc_float rad)
+amath_float toDegrees(amath_float rad)
 {
 	return rad * (180 / 3.14159265358979323846264338);
 }
 
-acalc_float toRadians(acalc_float deg)
+amath_float toRadians(amath_float deg)
 {
 	return deg * (3.14159265358979323846264338 / 180);
 }
 
-acalc_float aexp(acalc_float base, acalc_float exponent_r)
+amath_float aexp(amath_float base, amath_float exponent_r)
 {
 	return boost::multiprecision::pow(base, exponent_r);
 }
@@ -58,17 +59,17 @@ mpz_int afct(mpz_int num)
 	return result;
 }
 
-acalc_float anegate(acalc_float num)
+amath_float anegate(amath_float num)
 {
-	acalc_float onum = num;
+	amath_float onum = num;
 	num -= onum;
 	num -= onum;
 	return num;
 }
 
-acalc_float asqrt(acalc_float num)
+amath_float asqrt(amath_float num)
 {
-	acalc_float res(boost::multiprecision::sqrt(num));
+	amath_float res(boost::multiprecision::sqrt(num));
 	return res;
 }
 

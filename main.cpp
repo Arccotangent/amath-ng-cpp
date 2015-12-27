@@ -9,13 +9,13 @@
 #include <algorithm>
 #include <vector>
 #include "flopstest.hpp"
-#include "acalc-ng.hpp"
+#include "amath-ng.hpp"
 #include "opcode.hpp"
-#ifndef ACALCNG_HPP
-#error "You need acalc-ng.hpp to compile acalc-ng!"
+#ifndef AMATHNG_HPP
+#error "You need amath-ng.hpp to compile amath-ng!"
 #endif
 #ifndef FLOPSTEST_HPP
-#warning "Your build of acalc-ng will not support flopstest! (flopstest.hpp not found)"
+#warning "Your build of amath-ng will not support flopstest! (flopstest.hpp not found)"
 #endif
 #ifndef OPCODE_HPP
 #error "You need opcode.hpp to compile amath-ng!"
@@ -30,8 +30,8 @@ int main(const int argc, char* argv[])
 	{
 		//If an operation is removed, do not delete it, but simply comment it out here.
 		//Unless it is permanently removed
-		fprintf(stderr, "ACalc-NG - A Command Line Calculator by Arccotangent\n\n"
-						"Usage: acalc-ng <operation> <numbers>\n\n"
+		fprintf(stderr, "AMath-NG %s - A Command Line Calculator by Arccotangent\n\n"
+						"Usage: amath-ng <operation> <numbers>\n\n"
 						"Valid operations include:\n"
 						"add <2+ numbers> - Add numbers together\n"
 						"sub <2+ numbers> - Subtract numbers\n"
@@ -61,30 +61,31 @@ int main(const int argc, char* argv[])
 						"atan <number> - Trigonometric function - Arctangent\n"
 						"log <number> - Natural logarithm\n"
 						"log10 <number> - Base 10 logarithm\n"
-						"psq <amount> - Print AMOUNT perfect squares starting with 1.\n"
-						"ppwr <amount> <exponent> - Print AMOUNT bases to EXPONENT starting with 1.\n"
+						"psq <amount> - Print AMOUNT perfect squares starting with 1\n"
+						"ppwr <amount> <exponent> - Print AMOUNT bases to EXPONENT starting with 1\n"
 						"pcr <actual> <experimental> - Calculate percent error\n"
 						"cpi <principal> <%% rate> <compounds per year> <time in years> - Calculate compound interest\n"
 						"avg <numbers> - Calculate average of numbers\n"
 						"stdev <numbers> - Calculate standard deviation of numbers\n"
-						"zsc <data> <mean> <standard deviation> - Get z-score of a number\n"
+						"zsc <data> <average> <standard deviation> - Get z-score of a number\n"
 						"ord <numbers> - Order numbers smallest to greatest\n"
+						"ccm <radius> - Calculate circumference of circle\n"
 		#ifdef FLOPSTEST_HPP
 						"flopstest - How fast can your computer do math? Computational power is measured in floating point operations per second (FLOP/s)\n"
 		#endif
 						"\nMAXIMUM NUMBER PRECISION BEFORE SCIENTIFIC NOTATION IS USED IS 2,500 DIGITS."
-						"\n");
+						"\n", VERSION);
 		return 1;
 	}
-	cout << std::setprecision(std::numeric_limits<acalc_float>::max_digits10) << flush;
+	cout << std::setprecision(std::numeric_limits<amath_float>::max_digits10) << flush;
 	int opcode = getOpCode(argc, argv[1]);
 	if (opcode == 1)
 	{
-		acalc_float result = 0;
+		amath_float result = 0;
 		unsigned int argcount = argc - 2;
 		for (unsigned int i = 0; i < argcount; i++)
 		{
-			acalc_float addend;
+			amath_float addend;
 			addend.assign(argv[i + 2]);
 			result += addend;
 		}
@@ -92,12 +93,12 @@ int main(const int argc, char* argv[])
 	}
 	else if (opcode == 2)
 	{
-		acalc_float result;
+		amath_float result;
 		result.assign(argv[2]);
 		unsigned int argcount = argc - 3;
 		for (unsigned int i = 0; i < argcount; i++)
 		{
-			acalc_float subtrahend;
+			amath_float subtrahend;
 			subtrahend.assign(argv[i + 3]);
 			result -= subtrahend;
 		}
@@ -105,11 +106,11 @@ int main(const int argc, char* argv[])
 	}
 	else if (opcode == 3)
 	{
-		acalc_float result = 1;
+		amath_float result = 1;
 		unsigned int argcount = argc - 2;
 		for (unsigned int i = 0; i < argcount; i++)
 		{
-			acalc_float multiplicand;
+			amath_float multiplicand;
 			multiplicand.assign(argv[i + 2]);
 			result *= multiplicand;
 		}
@@ -117,12 +118,12 @@ int main(const int argc, char* argv[])
 	}
 	else if (opcode == 4)
 	{
-		acalc_float result;
+		amath_float result;
 		result.assign(argv[2]);
 		unsigned int argcount = argc - 3;
 		for (unsigned int i = 0; i < argcount; i++)
 		{
-			acalc_float divisor;
+			amath_float divisor;
 			divisor.assign(argv[i + 3]);
 			result /= divisor;
 		}
@@ -130,44 +131,44 @@ int main(const int argc, char* argv[])
 	}
 	else if (opcode == 5)
 	{
-		acalc_float b;
+		amath_float b;
 		b.assign(argv[2]);
-		acalc_float e;
+		amath_float e;
 		e.assign(argv[3]);
-		acalc_float result = aexp(b, e);
+		amath_float result = aexp(b, e);
 		cout << static_cast<string>(result) << endl;
 	}
 	else if (opcode == 6)
 	{
-		acalc_float num;
+		amath_float num;
 		num.assign(argv[2]);
-		acalc_float result = asqrt(num);
+		amath_float result = asqrt(num);
 		cout << static_cast<string>(result) << endl;
 	}
 	else if (opcode == 7)
 	{
-		acalc_float a;
-		acalc_float b;
-		acalc_float c;
+		amath_float a;
+		amath_float b;
+		amath_float c;
 		a.assign(argv[2]);
 		b.assign(argv[3]);
 		c.assign(argv[4]);
-		acalc_float x1;
-		acalc_float x2;
-		acalc_float neg_b = -b;
-		acalc_float b2 = aexp(b, 2);
-		acalc_float fac = 4 * a * c;
-		acalc_float discrim = b2 - fac;
+		amath_float x1;
+		amath_float x2;
+		amath_float neg_b = -b;
+		amath_float b2 = aexp(b, 2);
+		amath_float fac = 4 * a * c;
+		amath_float discrim = b2 - fac;
 		if (discrim < 0)
 		{
-			cout << "[ACALC-NG] ERR: No real solutions! Discriminant is negative. (Discriminant = " << static_cast<string>(discrim) << ")" << endl;
+			cout << "[AMATH-NG] ERR: No real solutions! Discriminant is negative. (Discriminant = " << static_cast<string>(discrim) << ")" << endl;
 			return 1;
 		}
 		else
 		{
 			cout << "Discriminant = " << static_cast<string>(discrim) << endl;
 		}
-		acalc_float dsqrt = asqrt(discrim);
+		amath_float dsqrt = asqrt(discrim);
 		x1 = (neg_b + dsqrt) / 2 * a;
 		x2 = (neg_b - dsqrt) / 2 * a;
 		cout << "x = " << static_cast<string>(x1) << endl << flush;
@@ -176,11 +177,11 @@ int main(const int argc, char* argv[])
 	else if (opcode == 8)
 	{
 		string number = argv[2];
-		acalc_float num;
+		amath_float num;
 		num.assign(number);
 		if (num < 0)
 		{
-			cerr << "[ACALC-NG] Error: Invalid argument!" << endl;
+			cerr << "[AMATH-NG] Error: Invalid argument!" << endl;
 		}
 		if (number.find(".") != number.npos)
 		{
@@ -201,10 +202,10 @@ int main(const int argc, char* argv[])
 	}
 	else if (opcode == 9)
 	{
-		const acalc_float pi = 3.14159265358979323846264338;
-		acalc_float radius;
+		const amath_float pi = 3.14159265358979323846264338;
+		amath_float radius;
 		radius.assign(argv[2]);
-		acalc_float area = aexp(radius, 2);
+		amath_float area = aexp(radius, 2);
 		area *= pi;
 		cout << "Area: " << aexp(radius, 2) << " * Pi" << endl;
 		cout << "Approximately: " << area << endl;
@@ -294,34 +295,34 @@ int main(const int argc, char* argv[])
 	}
 	else if (opcode == 15)
 	{
-		acalc_float a;
-		acalc_float b;
-		acalc_float c;
+		amath_float a;
+		amath_float b;
+		amath_float c;
 		a.assign(argv[2]);
 		b.assign(argv[3]);
 		c.assign(argv[4]);
 		//Side work
-		acalc_float b2 = b / a;
+		amath_float b2 = b / a;
 		b2 /= 2;
-		acalc_float cs = aexp(b2, 2);
+		amath_float cs = aexp(b2, 2);
 		//End side work
 		//c /= a;
-		acalc_float neg_cs = anegate(cs);
-		acalc_float vtx_y = c + neg_cs; //balance equation
-		acalc_float vtx_x = sqrt(cs);
+		amath_float neg_cs = anegate(cs);
+		amath_float vtx_y = c + neg_cs; //balance equation
+		amath_float vtx_x = sqrt(cs);
 		if (b < 0)
 			vtx_x = anegate(vtx_x); //"Drop" minus sign if b is negative
 		cout << "VERTEX FORM: y = (x + " << static_cast<string>(vtx_x) << ")² + " << static_cast<string>(vtx_y) <<  endl;
-		acalc_float neg_vtx_x = anegate(vtx_x);
-		//acalc_float neg_vtx_x = vtx_x;
+		amath_float neg_vtx_x = anegate(vtx_x);
+		//amath_float neg_vtx_x = vtx_x;
 		cout << "VERTEX: (" << static_cast<string>(neg_vtx_x) << ", " << static_cast<string>(vtx_y) << ")" << endl;
-		acalc_float neg_b;
+		amath_float neg_b;
 		//if (b < 0)
 		//	neg_b = b;
 		//else
 			neg_b = anegate(b);
-		acalc_float a2 = a * 2;
-		acalc_float vtx_x_verify = neg_b / a2;
+		amath_float a2 = a * 2;
+		amath_float vtx_x_verify = neg_b / a2;
 		if (vtx_x_verify == neg_vtx_x)
 			cout << "VERIFIED - Good vertex." << endl;
 		else
@@ -332,10 +333,10 @@ int main(const int argc, char* argv[])
 	}
 	else if (opcode == 16)
 	{
-		acalc_float side1, side2;
+		amath_float side1, side2;
 		side1.assign(argv[2]);
 		side2.assign(argv[3]);
-		acalc_float hypot;
+		amath_float hypot;
 		side1 = aexp(side1, 2);
 		side2 = aexp(side2, 2);
 		hypot = asqrt(side1 + side2);
@@ -350,202 +351,211 @@ int main(const int argc, char* argv[])
 	}
 	else if (opcode == 18)
 	{
-		acalc_float num;
+		amath_float num;
 		num.assign(argv[2]);
-		acalc_float oh = boost::multiprecision::sin(toRadians(num));
+		amath_float oh = boost::multiprecision::sin(toRadians(num));
 		cout << static_cast<string>(oh) << endl;
 	}
 	else if (opcode == 19)
 	{
-		acalc_float num;
+		amath_float num;
 		num.assign(argv[2]);
-		acalc_float ah = boost::multiprecision::cos(toRadians(num));
+		amath_float ah = boost::multiprecision::cos(toRadians(num));
 		cout << static_cast<string>(ah) << endl;
 	}
 	else if (opcode == 20)
 	{
-		acalc_float num;
+		amath_float num;
 		num.assign(argv[2]);
-		acalc_float oa = boost::multiprecision::tan(toRadians(num));
+		amath_float oa = boost::multiprecision::tan(toRadians(num));
 		cout << static_cast<string>(oa) << endl;
 	}
 	else if (opcode == 21)
 	{
-		acalc_float num;
+		amath_float num;
 		num.assign(argv[2]);
-		acalc_float as = toDegrees(boost::multiprecision::asin(num));
+		amath_float as = toDegrees(boost::multiprecision::asin(num));
 		cout << static_cast<string>(as) << endl;
 	}
 	else if (opcode == 22)
 	{
-		acalc_float num;
+		amath_float num;
 		num.assign(argv[2]);
-		acalc_float ac = toDegrees(boost::multiprecision::acos(num));
+		amath_float ac = toDegrees(boost::multiprecision::acos(num));
 		cout << static_cast<string>(ac) << endl;
 	}
 	else if (opcode == 23)
 	{
-		acalc_float num;
+		amath_float num;
 		num.assign(argv[2]);
-		acalc_float at = toDegrees(boost::multiprecision::atan(num));
+		amath_float at = toDegrees(boost::multiprecision::atan(num));
 		cout << static_cast<string>(at) << endl;
 	}
 	else if (opcode == 24)
 	{
-		acalc_float num;
+		amath_float num;
 		num.assign(argv[2]);
-		acalc_float o = 1;
-		acalc_float t = 3;
-		acalc_float odt = o / t;
-		acalc_float c = aexp(num, odt);
+		amath_float o = 1;
+		amath_float t = 3;
+		amath_float odt = o / t;
+		amath_float c = aexp(num, odt);
 		cout << static_cast<string>(c) << endl;
 	}
 	else if (opcode == 25)
 	{
-		acalc_float num;
+		amath_float num;
 		num.assign(argv[2]);
-		acalc_float nlog = boost::multiprecision::log(num);
+		amath_float nlog = boost::multiprecision::log(num);
 		cout << static_cast<string>(nlog) << endl;
 	}
 	else if (opcode == 26)
 	{
-		acalc_float num;
+		amath_float num;
 		num.assign(argv[2]);
-		acalc_float nlog = boost::multiprecision::log10(num);
+		amath_float nlog = boost::multiprecision::log10(num);
 		cout << static_cast<string>(nlog) << endl;
 	}
 	else if (opcode == 27)
 	{
-		acalc_float amt;
+		amath_float amt;
 		amt.assign(argv[2]);
-		acalc_float base = 1;
+		amath_float base = 1;
 		for (base = 1; base <= amt; base++)
 		{
-			acalc_float pwr = aexp(base, 2);
+			amath_float pwr = aexp(base, 2);
 			cout << static_cast<string>(pwr) << endl;
 		}
 	}
 	else if (opcode == 28)
 	{
-		acalc_float amt;
+		amath_float amt;
 		amt.assign(argv[2]);
-		acalc_float expo;
+		amath_float expo;
 		expo.assign(argv[3]);
-		acalc_float base = 1;
+		amath_float base = 1;
 		for (base = 1; base <= amt; base++)
 		{
-			acalc_float pwr = aexp(base, expo);
+			amath_float pwr = aexp(base, expo);
 			cout << static_cast<string>(pwr) << endl;
 		}
 	}
 	else if (opcode == 29)
 	{
-		acalc_float act;
-		acalc_float exper;
+		amath_float act;
+		amath_float exper;
 		act.assign(argv[2]);
 		exper.assign(argv[3]);
-		acalc_float uerr = ((exper - act) / act) * 100;
-		acalc_float err = boost::multiprecision::abs(uerr);
+		amath_float uerr = ((exper - act) / act) * 100;
+		amath_float err = boost::multiprecision::abs(uerr);
 		cout << static_cast<string>(err) << endl;
 	}
 	else if (opcode == 30)
 	{
-		acalc_float principal, rate, num, time;
+		amath_float principal, rate, num, time;
 		principal.assign(argv[2]);
 		rate.assign(argv[3]);
 		num.assign(argv[4]);
 		time.assign(argv[5]);
 		rate /= 100;
-		acalc_float amt;
-		acalc_float ttc = num * time;
-		acalc_float urate = (1 + rate) / num;
-		acalc_float gfac = aexp(urate, ttc);
+		amath_float amt;
+		amath_float ttc = num * time;
+		amath_float urate = (1 + rate) / num;
+		amath_float gfac = aexp(urate, ttc);
 		amt = principal * gfac;
 		cout << static_cast<string>(amt) << endl;
 	}
 	else if (opcode == 31)
 	{
-		acalc_float result = 0;
+		amath_float result = 0;
 		unsigned int argcount = argc - 2;
 		for (unsigned int i = 0; i < argcount; i++)
 		{
-			acalc_float addend;
+			amath_float addend;
 			addend.assign(argv[i + 2]);
 			result += addend;
 		}
-		acalc_float acount = argcount;
+		amath_float acount = argcount;
 		result /= acount;
 		cout << static_cast<string>(result) << endl;
 	}
 	else if (opcode == 32)
 	{
-		acalc_float total = 0;
+		amath_float total = 0;
 		unsigned int argcount = argc - 2;
 		for (unsigned int i = 0; i < argcount; i++)
 		{
-			acalc_float addend;
+			amath_float addend;
 			addend.assign(argv[i + 2]);
 			total += addend;
 		}
-		acalc_float acount = argcount;
-		acalc_float avg = total / acount;
-		acalc_float variance;
+		amath_float acount = argcount;
+		amath_float avg = total / acount;
+		amath_float variance;
 		for (unsigned int i = 0; i < argcount; i++)
 		{
-			acalc_float data;
+			amath_float data;
 			data.assign(argv[i + 2]);
-			acalc_float dfm = data - avg;
+			amath_float dfm = data - avg;
 			variance += aexp(dfm, 2);
 		}
 		variance /= acount;
-		acalc_float stdev = asqrt(variance);
+		amath_float stdev = asqrt(variance);
 		cout << static_cast<string>(stdev) << endl;
 	}
 	else if (opcode == 33)
 	{
-		acalc_float data, mean, stdev;
+		amath_float data, mean, stdev;
 		data.assign(argv[2]);
 		mean.assign(argv[3]);
 		stdev.assign(argv[4]);
-		acalc_float zscore = data - mean;
+		amath_float zscore = data - mean;
 		zscore /= stdev;
 		cout << static_cast<string>(zscore) << endl;
 	}
 	else if (opcode == 34)
 	{
-		acalc_float udata[argc - 2];
+		amath_float udata[argc - 2];
 		for (int i = 0; i < argc - 2; i++)
 		{
-			acalc_float dbuf;
+			amath_float dbuf;
 			dbuf.assign(argv[i + 2]);
 			udata[i] = dbuf;
 		}
-		acalc_float* sorted = numsort(udata, argc - 2);
+		amath_float* sorted = numsort(udata, argc - 2);
 		for (int i = 0; i < argc - 2; i++)
 			cout << static_cast<string>(sorted[i]) << " ";
 		cout << endl;
 	}
+	else if (opcode == 35)
+	{
+		amath_float pi = 3.14159265358979323846264338;
+		amath_float radius;
+		radius.assign(argv[2]);
+		amath_float ccm = pi * 2 * radius;
+		cout << "Area: 2 * Pi * " << static_cast<string>(radius) << endl;
+		cout << "Approximately: " << static_cast<string>(ccm) << endl;
+	}
 	else if (opcode == -1)
 	{
-		cerr << "[ACALC-NG] ERR: Review your argument count!" << endl;
+		cerr << "[AMATH-NG] ERR: Review your argument count!" << endl;
 	}
 	else if (opcode == -2)
 	{
-		cerr << "[ACALC-NG] ERR: Invalid operation!" << endl;
+		cerr << "[AMATH-NG] ERR: Invalid operation!" << endl;
 	}
 	else if (opcode == -50)
 	{
 #ifdef FLOPSTEST_HPP
 		speedtest();
 #else
-		cerr << "[ACALC-NG] ERR: This build does not support flopstest since it was built without the header." << endl;
+		cerr << "[AMATH-NG] ERR: This build does not support flopstest since it was built without the header." << endl;
 #endif
 	}
 	else if (opcode == -100)
 	{
-		cout << "[ACALC-NG] Debug mode not yet complete" << endl;
+		cout << "[AMATH-NG] Debug mode not yet complete" << endl;
 	}
 	else
-		cerr << "[ACALC-NG] ERR: An unknown error has occurred. (INVOPC)" << endl;
+		cerr << "[AMATH-NG] ERR: An unknown error has occurred. (INVOPC)" << endl;
 	return 0;
 }

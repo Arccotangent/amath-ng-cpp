@@ -250,9 +250,9 @@ int getOpCode(int argcount, string op)
 		else
 			opcode = -1;
 	}
-	else if (strcmp(op_c, "iqr") == 0)
+	else if (strcmp(op_c, "ccm") == 0)
 	{
-		if (args >= 2)
+		if (args == 1)
 			opcode = 35;
 		else
 			opcode = -1;
