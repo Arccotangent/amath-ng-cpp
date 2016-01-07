@@ -2,12 +2,9 @@
 #include <boost/random.hpp>
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/random_device.hpp>
-#include <boost/array.hpp>
 #include <cstdio>
 #include <iostream>
 #include <cstdlib>
-#include <algorithm>
-#include <vector>
 #include "flopstest.hpp"
 #include "amath-ng.hpp"
 #include "opcode.hpp"
@@ -553,7 +550,24 @@ int main(const int argc, char* argv[])
 	}
 	else if (opcode == -100)
 	{
-		cout << "[AMATH-NG] Debug mode not yet complete" << endl;
+		cout << "[AMATH-NG] DEBUG: LIBGMP tests are underway. LIBGMP may or may not be replacing the present types." << endl;
+		/*
+		mpf_class one = 1;
+		mpf_class three = 3;
+		mpf_class ot = one / three;
+		mpf_class two = 2;
+		mpf_class oh = one / two;
+		mpf_class os = one / 7;
+		mpf_class yeye = one + os;
+		mpf_set_default_prec(512);
+		mpf_class tty2 = 0.1234781934612938746786528731239476213948723619481623948612395861985762938746129873461982356192873469182375619328765987639812639587126395816239486123985612359816248972356981237642319846213846123984621387;
+		cout << oh << endl;
+		cout << ot << endl;
+		cout << os << endl;
+		cout << yeye << endl;
+		cout << tty2 << endl;
+		cout << mpf_get_default_prec() << endl;
+		*/
 	}
 	else
 		cerr << "[AMATH-NG] ERR: An unknown error has occurred. (INVOPC)" << endl;

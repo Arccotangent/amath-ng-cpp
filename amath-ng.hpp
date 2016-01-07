@@ -3,6 +3,7 @@
 #define VERSION "v24.0"
 #include <boost/multiprecision/gmp.hpp>
 #include <boost/sort/sort.hpp>
+#include <vector>
 #include <iostream>
 using namespace std;
 using namespace boost::multiprecision;
