@@ -50,9 +50,9 @@ int main(const int argc, char* argv[])
 						//"dst <x1> <y1> <x2> <y2> - Get distance between 2 points\n"
 						"hypot <side1> <side2> - Get hypotenuse of right triangle\n"
 						"fct <number> - Factorial of number\n"
-						"sin <number> - Trigonometric function - Sine\n"
-						"cos <number> - Trigonometric function - Cosine\n"
-						"tan <number> - Trigonometric function - Tangent\n"
+						"sin <number> - Trigonometric function - Sine - opposite / hypotenuse\n"
+						"cos <number> - Trigonometric function - Cosine - adjacent / hypotenuse\n"
+						"tan <number> - Trigonometric function - Tangent - opposite / adjacent\n"
 						"asin <number> - Trigonometric function - Arcsine\n"
 						"acos <number> - Trigonometric function - Arccosine\n"
 						"atan <number> - Trigonometric function - Arctangent\n"
@@ -67,6 +67,8 @@ int main(const int argc, char* argv[])
 						"zsc <data> <average> <standard deviation> - Get z-score of a number\n"
 						"ord <numbers> - Order numbers smallest to greatest\n"
 						"ccm <radius> - Calculate circumference of circle\n"
+						"los <side A> <side B> <angle A> - Trigonometric law of sines - Returns angle B (across from side B)\n"
+						"loc <side A> <side B> <side C> - Trigonometric law of cosines - Returns angle C (across from side C)\n"
 		#ifdef FLOPSTEST_HPP
 						"flopstest - How fast can your computer do math? Computational power is measured in floating point operations per second (FLOP/s)\n"
 		#endif
@@ -531,6 +533,38 @@ int main(const int argc, char* argv[])
 		amath_float ccm = pi * 2 * radius;
 		cout << "Area: 2 * Pi * " << static_cast<string>(radius) << endl;
 		cout << "Approximately: " << static_cast<string>(ccm) << endl;
+	}
+	else if (opcode == 36)
+	{
+		cout << "Mark your triangle: angle A across from side A, angle B across from side B, angle C across from side C" << endl;
+		cout << "Calculating angle B length by law of sines." << endl;
+		amath_float aa, ab, sa;
+		aa.assign(argv[2]);
+		ab.assign(argv[3]);
+		sa.assign(argv[4]);
+		amath_float saa = boost::multiprecision::sin(aa);
+		amath_float sab = boost::multiprecision::sin(ab);
+		amath_float a = sa / saa;
+		amath_float sb = a * sab;
+		cout << static_cast<string>(sb) << endl;
+	}
+	else if (opcode == 37)
+	{
+		cout << "Mark your triangle: angle A across from side A, angle B across from side B, angle C across from side C" << endl;
+		cout << "Calculating angle C measure by law of cosines." << endl;
+		amath_float sa, sb, sc;
+		sa.assign(argv[2]);
+		sb.assign(argv[3]);
+		sc.assign(argv[4]);
+		amath_float sa2, sb2, sc2;
+		sa2 = aexp(sa, 2);
+		sb2 = aexp(sb, 2);
+		sc2 = aexp(sc, 2);
+		amath_float tab = 2 * sa * sb; //2ab
+		amath_float cosac = sa2 + sb2 - sc2; //cos angle C
+		cosac /= tab;
+		cosac = toDegrees(boost::multiprecision::acos(cosac));
+		cout << static_cast<string>(cosac) << endl;
 	}
 	else if (opcode == -1)
 	{

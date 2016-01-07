@@ -257,6 +257,20 @@ int getOpCode(int argcount, string op)
 		else
 			opcode = -1;
 	}
+	else if (strcmp(op_c, "los") == 0)
+	{
+		if (args == 3)
+			opcode = 36;
+		else
+			opcode = -1;
+	}
+	else if (strcmp(op_c, "loc") == 0)
+	{
+		if (args == 3)
+			opcode = 37;
+		else
+			opcode = -1;
+	}
 	else if (strcmp(op_c, "flopstest") == 0)
 		opcode = -50;
 	else if (strcmp(op_c, "deb") == 0)
