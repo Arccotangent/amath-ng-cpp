@@ -1,6 +1,5 @@
 #ifndef AMATHNG_HPP
 #define AMATHNG_HPP
-#define VERSION "v24.0"
 #include <boost/multiprecision/gmp.hpp>
 #include <boost/sort/sort.hpp>
 #include <vector>
@@ -74,13 +73,71 @@ amath_float asqrt(amath_float num)
 	return res;
 }
 
+mpz_int msqrt(mpz_int num)
+{
+	mpz_int res(boost::multiprecision::sqrt(num));
+	return res;
+}
+
 mpz_int agcf(mpz_int num1, mpz_int num2)
 {
 	return gcd(num1, num2);
 }
 
+bool isPrime(mpz_int num)
+{
+	if (num <=1)
+		return false;
+	else if (num == 2)
+		return true;
+	else if (num % 2 == 0)
+		return false;
+	else
+	{
+		bool prime = true;
+		mpz_int divisor = 3;
+		mpz_int num_d = static_cast<mpz_int>(num);
+		mpz_int upperLimit = static_cast<mpz_int>(msqrt(num_d) + 1);
+
+		while (divisor <= upperLimit)
+		{
+			if (num % divisor == 0)
+				prime = false;
+			divisor +=2;
+		}
+		return prime;
+	}
+}
+
 void afactor(mpz_int num)
 {
+	/*
+	mpz_int xfixed = 2, cycle_size = 2, x = 2, factor = 1;
+	cout << static_cast<string>(num) << ": " << flush;
+	while (num % 2 == 0)
+	{
+		num /= 2;
+		cout << "2 " << flush;
+	}
+	while (!isPrime(num) && num != 1)
+	{
+		while (factor == 1)
+		{
+			factor = 1;
+			for (mpz_int count=1; count <= cycle_size && factor <= 1; count++)
+			{
+				x = (x * x + 1) % num;
+				factor = agcf(x - xfixed, num);
+			}
+			cycle_size *= 2;
+			xfixed = x;
+			num /= factor;
+			cout << static_cast<string>(factor) << " " << flush;
+		}
+		factor = 1;
+	}
+	cout << endl;
+	*/
 	cout << static_cast<string>(num) << ": " << flush;
 	while (num % 2 == 0)
 	{
