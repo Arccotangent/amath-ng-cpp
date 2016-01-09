@@ -72,10 +72,11 @@ int main(const int argc, char* argv[])
 						"\n--Miscellaneous--\n\n"
 						"psq <amount> - Print AMOUNT perfect squares starting with 1\n"
 						"ppwr <amount> <exponent> - Print AMOUNT bases to EXPONENT starting with 1\n"
+						"pprm <amount> - Print AMOUNT prime numbers starting with 3\n"
 						"ord <numbers> - Order numbers smallest to greatest\n"
 						"ccm <radius> - Calculate circumference of circle\n"
 						"rand <min> <max> [seed] - Generate random integer between MIN and MAX with optional SEED\n"
-						"prm <number> - Test if number is prime [TEMPORARILY REMOVED]\n"
+						"prm <number> - Test if number is prime by trial division\n"
 		#ifdef FLOPSTEST_HPP
 						"\n--Performance Testing--\n\n"
 						"flopstest - How fast can your computer do math? Computational power is measured in floating point operations per second (FLOP/s)\n"
@@ -228,39 +229,13 @@ int main(const int argc, char* argv[])
 	}
 	else if (opcode == 11)
 	{
-		/*
-		mpz_int prm;
-		prm.assign(argv[2]);
-		boost::random::mt19937 gen2(clock());
-		if (miller_rabin_test(prm, 25, gen2))
-		{
-			cout << "Number is probably prime. It is recommended you perform another test to confirm." << endl;
-			cout << "Perform another test to confirm? (y/n) ";
-			char yn;
-			cin >> yn;
-			if (yn == 'y' || yn == 'Y')
-			{
-				cout << "Confirming prime..." << endl;
-				if (miller_rabin_test((prm - 1) / 2, 25, gen2))
-				{
-					cout << "Number is confirmed prime." << endl;
-				}
-				else
-				{
-					cout << "Number is not confirmed prime, but this does not mean it is not prime." << endl;
-				}
-			}
-			else
-			{
-				cout << "Number is not confirmed prime since the test was not performed, but this does not mean it is not prime." << endl;
-			}
-		}
+		mpz_int num;
+		num.assign(argv[2]);
+		bool p = isPrime(num);
+		if (p)
+			cout << "Number is prime." << endl;
 		else
-		{
 			cout << "Number is not prime." << endl;
-		}
-		*/
-		cerr << "Prime operation temporarily removed." << endl;
 	}
 	else if (opcode == 12)
 	{
@@ -573,6 +548,22 @@ int main(const int argc, char* argv[])
 		cosac /= tab;
 		cosac = toDegrees(boost::multiprecision::acos(cosac));
 		cout << static_cast<string>(cosac) << endl;
+	}
+	else if (opcode == 38)
+	{
+		mpz_int num, prime = 3, i = 0;
+		bool p;
+		num.assign(argv[2]);
+		while (i < num)
+		{
+			p = isPrime_sil(prime);
+			if (p)
+			{
+				cout << static_cast<string>(prime) << endl;
+				i++;
+			}
+			prime += 2;
+		}
 	}
 	else if (opcode == -1)
 	{
