@@ -66,6 +66,12 @@ int main(const int argc, char* argv[])
 						"atan <number> - Trigonometric function - Arctangent\n"
 						"los <side A> <side B> <angle A> - Trigonometric law of sines - Returns angle B (across from side B)\n"
 						"loc <side A> <side B> <side C> - Trigonometric law of cosines - Returns angle C (across from side C)\n"
+						"csc <number> - Reciprocal Trigonometric Function - Cosecant\n"
+						"sec <number> - Reciprocal Trigonometric Function - Secant\n"
+						"cot <number> - Reciprocal Trigonometric Function - Cotangent\n"
+						"acsc <number> - Reciprocal Trigonometric Function - Arcsecant\n"
+						"asec <number> - Reciprocal Trigonometric Function - Arccosecant\n"
+						"acot <number> - Reciprocal Trigonometric Function - Arccotangent\n"
 						"\n--Science--\n\n"
 						"sf <1 number> - Get amount of sig figs in number\n"
 						"pcr <actual> <experimental> - Calculate percent error\n"
@@ -325,7 +331,9 @@ int main(const int argc, char* argv[])
 		amath_float hypot;
 		side1 = aexp(side1, 2);
 		side2 = aexp(side2, 2);
-		hypot = asqrt(side1 + side2);
+		amath_float c2 = side1 + side2;
+		hypot = asqrt(c2);
+		cout << "Square root of: " << static_cast<string>(c2) << endl;
 		cout << static_cast<string>(hypot) << endl;
 	}
 	else if (opcode == 17)
@@ -580,6 +588,48 @@ int main(const int argc, char* argv[])
 			d += p;
 			cout << static_cast<string>(i) << " half life: " << static_cast<string>(p) << "% parent, " << static_cast<string>(d) << "% daughter" << endl;
 		}
+	}
+	else if (opcode == 40)
+	{
+		amath_float num;
+		num.assign(argv[2]);
+		amath_float oh = 1 / boost::multiprecision::sin(toRadians(num));
+		cout << static_cast<string>(oh) << endl;
+	}
+	else if (opcode == 41)
+	{
+		amath_float num;
+		num.assign(argv[2]);
+		amath_float ah = 1 / boost::multiprecision::cos(toRadians(num));
+		cout << static_cast<string>(ah) << endl;
+	}
+	else if (opcode == 42)
+	{
+		amath_float num;
+		num.assign(argv[2]);
+		amath_float oa = 1 / boost::multiprecision::tan(toRadians(num));
+		cout << static_cast<string>(oa) << endl;
+	}
+	else if (opcode == 43)
+	{
+		amath_float num;
+		num.assign(argv[2]);
+		amath_float as = 1 / toDegrees(boost::multiprecision::asin(num));
+		cout << static_cast<string>(as) << endl;
+	}
+	else if (opcode == 44)
+	{
+		amath_float num;
+		num.assign(argv[2]);
+		amath_float ac = 1 / toDegrees(boost::multiprecision::acos(num));
+		cout << static_cast<string>(ac) << endl;
+	}
+	else if (opcode == 45)
+	{
+		amath_float num;
+		num.assign(argv[2]);
+		amath_float at = 1 / toDegrees(boost::multiprecision::atan(num));
+		cout << static_cast<string>(at) << endl;
 	}
 	else if (opcode == -1)
 	{

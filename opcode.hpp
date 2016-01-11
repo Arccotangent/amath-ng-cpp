@@ -285,6 +285,48 @@ int getOpCode(int argcount, string op)
 		else
 			opcode = -1;
 	}
+	else if (strcmp(op_c, "csc") == 0)
+	{
+		if (args == 1)
+			opcode = 40;
+		else
+			opcode = -1;
+	}
+	else if (strcmp(op_c, "sec") == 0)
+	{
+		if (args == 1)
+			opcode = 41;
+		else
+			opcode = -1;
+	}
+	else if (strcmp(op_c, "cot") == 0)
+	{
+		if (args == 1)
+			opcode = 42;
+		else
+			opcode = -1;
+	}
+	else if (strcmp(op_c, "acsc") == 0)
+	{
+		if (args == 1)
+			opcode = 43;
+		else
+			opcode = -1;
+	}
+	else if (strcmp(op_c, "asec") == 0)
+	{
+		if (args == 1)
+			opcode = 44;
+		else
+			opcode = -1;
+	}
+	else if (strcmp(op_c, "acot") == 0)
+	{
+		if (args == 1)
+			opcode = 45;
+		else
+			opcode = -1;
+	}
 	else if (strcmp(op_c, "flopstest") == 0)
 		opcode = -50;
 	else if (strcmp(op_c, "deb") == 0)
