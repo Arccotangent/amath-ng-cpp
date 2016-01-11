@@ -69,6 +69,7 @@ int main(const int argc, char* argv[])
 						"\n--Science--\n\n"
 						"sf <1 number> - Get amount of sig figs in number\n"
 						"pcr <actual> <experimental> - Calculate percent error\n"
+						"hl <amount> - Print amount of half lives with respective ratios\n"
 						"\n--Miscellaneous--\n\n"
 						"psq <amount> - Print AMOUNT perfect squares starting with 1\n"
 						"ppwr <amount> <exponent> - Print AMOUNT bases to EXPONENT starting with 1\n"
@@ -244,17 +245,20 @@ int main(const int argc, char* argv[])
 		min.assign(argv[2]);
 		max.assign(argv[3]);
 		boost::random::random_device r;
-		unsigned int initnum;
+		unsigned long long initnum;
 		char* a;
 		if (argc == 5)
 		{
-			initnum = strtol(argv[4], &a, 10);
+			initnum = strtoull(argv[4], &a, 10);
 			for (unsigned short i = 0; i < strlen(argv[4]); i++)
 				argv[4][i] = 0x00;
 		}
 		else
+		{
 			initnum = r();
-		boost::random::mt19937_64 gen(initnum);
+			initnum *= r();
+		}
+		boost::random::mt19937 gen(initnum);
 		cout << "Seed: " << initnum << endl;
 		initnum = 0;
 		boost::random::uniform_int_distribution<mpz_int> distrib(min, max);
@@ -563,6 +567,18 @@ int main(const int argc, char* argv[])
 				i++;
 			}
 			prime += 2;
+		}
+	}
+	else if (opcode == 39)
+	{
+		mpz_int amt;
+		amt.assign(argv[2]);
+		amath_float p = 100, d = 0;
+		for (mpz_int i = 1; i <= amt; i++)
+		{
+			p /= 2;
+			d += p;
+			cout << static_cast<string>(i) << " half life: " << static_cast<string>(p) << "% parent, " << static_cast<string>(d) << "% daughter" << endl;
 		}
 	}
 	else if (opcode == -1)
