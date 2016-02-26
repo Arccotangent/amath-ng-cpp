@@ -106,7 +106,7 @@ int getOpCode(int argcount, string op)
 		else
 			opcode = -1;
 	}
-	else if (strcmp(op_c, "gcf") == 0)
+	else if (strcmp(op_c, "gcd") == 0)
 	{
 		if (args >= 2)
 			opcode = 14;
@@ -334,6 +334,13 @@ int getOpCode(int argcount, string op)
 	{
 		if (args == 2)
 			opcode = 46;
+		else
+			opcode = -1;
+	}
+	else if (strcmp(op_c, "lcm") == 0)
+	{
+		if (args == 2)
+			opcode = 47;
 		else
 			opcode = -1;
 	}

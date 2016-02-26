@@ -79,7 +79,7 @@ mpz_int msqrt(mpz_int num)
 	return res;
 }
 
-mpz_int agcf(mpz_int num1, mpz_int num2)
+mpz_int agcd(mpz_int num1, mpz_int num2)
 {
 	return gcd(num1, num2);
 }

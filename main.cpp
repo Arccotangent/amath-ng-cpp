@@ -42,7 +42,7 @@ int main(const int argc, char* argv[])
 						"fct <number> - Factorial of number\n"
 						"fac <number> - Get prime factors of number by trial division (slow, only for small integers)\n"
 						"gcd <2 numbers> - Get GCD (greatest common denominator) of numbers\n"
-						//"lcm <2 numbers> - Get LCM (least common multiple) of numbers\n"
+						"lcm <2 numbers> - Get LCM (least common multiple) of numbers\n"
 						"\n--Algebra--\n\n"
 						"qdr <a> <b> <c> - Solve quadratic equation equal to 0\n"
 						"vtx <a> <b> <c> - Get vertex of quadratic equation equal to y OR 0\n"
@@ -283,8 +283,8 @@ int main(const int argc, char* argv[])
 		mpz_int num2;
 		num1.assign(argv[2]);
 		num2.assign(argv[3]);
-		mpz_int gcf = agcf(num1, num2);
-		cout << static_cast<string>(gcf) << endl;
+		mpz_int gcd = agcd(num1, num2);
+		cout << static_cast<string>(gcd) << endl;
 	}
 	else if (opcode == 15)
 	{
@@ -642,6 +642,15 @@ int main(const int argc, char* argv[])
 		log2 = boost::multiprecision::log10(base);
 		amath_float ans = log1 / log2;
 		cout << static_cast<string>(ans) << endl;
+	}
+	else if (opcode == 47)
+	{
+		mpz_int num1;
+		mpz_int num2;
+		num1.assign(argv[2]);
+		num2.assign(argv[3]);
+		mpz_int lcm = alcm(num1, num2);
+		cout << static_cast<string>(lcm) << endl;
 	}
 	else if (opcode == -1)
 	{
