@@ -27,7 +27,7 @@ int main(const int argc, char* argv[])
 	{
 		//If an operation is removed, do not delete it, but simply comment it out here.
 		//Unless it is permanently removed
-		fprintf(stderr, "AMath-NG - A Command Line Calculator by Arccotangent\n\n"
+		cout <<	"AMath-NG - A Command Line Calculator by Arccotangent\n\n"
 						"Usage: amath-ng <operation> <numbers>\n\n"
 						"List of operations below\n"
 						"\n--General--\n\n"
@@ -41,14 +41,15 @@ int main(const int argc, char* argv[])
 						"cbrt <1 number> - Cube root\n"
 						"fct <number> - Factorial of number\n"
 						"fac <number> - Get prime factors of number by trial division (slow, only for small integers)\n"
-						"gcf <2 numbers> - Get GCF of numbers\n"
-						//"lcd <2 numbers> - Get LCD of numbers\n"
+						"gcd <2 numbers> - Get GCD (greatest common denominator) of numbers\n"
+						//"lcm <2 numbers> - Get LCM (least common multiple) of numbers\n"
 						"\n--Algebra--\n\n"
 						"qdr <a> <b> <c> - Solve quadratic equation equal to 0\n"
 						"vtx <a> <b> <c> - Get vertex of quadratic equation equal to y OR 0\n"
 						"log <number> - Natural logarithm\n"
 						"log10 <number> - Base 10 logarithm\n"
-						"cpi <principal> <%% rate> <compounds per year> <time in years> - Calculate compound interest\n"
+						"logb <base> <number> - Logarithm with custom base\n"
+						"cpi <principal> <% rate> <compounds per year> <time in years> - Calculate compound interest\n"
 						"\n--Geometry--\n\n"
 						"aoc <radius> - Calculate approximate area of circle\n"
 						"hypot <side1> <side2> - Get hypotenuse of right triangle\n"
@@ -89,7 +90,7 @@ int main(const int argc, char* argv[])
 						"flopstest - How fast can your computer do math? Computational power is measured in floating point operations per second (FLOP/s)\n"
 		#endif
 						"\nMAXIMUM NUMBER PRECISION BEFORE SCIENTIFIC NOTATION IS USED IS 2,500 DIGITS."
-						"\n");
+						"\n" << endl;
 		return 1;
 	}
 	cout << std::setprecision(std::numeric_limits<amath_float>::max_digits10) << flush;
@@ -631,6 +632,17 @@ int main(const int argc, char* argv[])
 		amath_float at = 1 / toDegrees(boost::multiprecision::atan(num));
 		cout << static_cast<string>(at) << endl;
 	}
+	else if (opcode == 46)
+	{
+		amath_float base, num;
+		base.assign(argv[2]);
+		num.assign(argv[3]);
+		amath_float log1, log2;
+		log1 = boost::multiprecision::log10(num);
+		log2 = boost::multiprecision::log10(base);
+		amath_float ans = log1 / log2;
+		cout << static_cast<string>(ans) << endl;
+	}
 	else if (opcode == -1)
 	{
 		cerr << "[AMATH-NG] ERR: Review your argument count!" << endl;
@@ -649,24 +661,7 @@ int main(const int argc, char* argv[])
 	}
 	else if (opcode == -100)
 	{
-		cout << "[AMATH-NG] DEBUG: LIBGMP tests are underway. LIBGMP may or may not be replacing the present types." << endl;
-		/*
-		mpf_class one = 1;
-		mpf_class three = 3;
-		mpf_class ot = one / three;
-		mpf_class two = 2;
-		mpf_class oh = one / two;
-		mpf_class os = one / 7;
-		mpf_class yeye = one + os;
-		mpf_set_default_prec(512);
-		mpf_class tty2 = 0.1234781934612938746786528731239476213948723619481623948612395861985762938746129873461982356192873469182375619328765987639812639587126395816239486123985612359816248972356981237642319846213846123984621387;
-		cout << oh << endl;
-		cout << ot << endl;
-		cout << os << endl;
-		cout << yeye << endl;
-		cout << tty2 << endl;
-		cout << mpf_get_default_prec() << endl;
-		*/
+		cout << "[AMATH-NG] DEBUG: Nothing here." << endl;
 	}
 	else
 		cerr << "[AMATH-NG] ERR: An unknown error has occurred. (INVOPC)" << endl;

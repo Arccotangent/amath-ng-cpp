@@ -84,6 +84,11 @@ mpz_int agcf(mpz_int num1, mpz_int num2)
 	return gcd(num1, num2);
 }
 
+mpz_int alcm(mpz_int num1, mpz_int num2)
+{
+	return lcm(num1, num2);
+}
+
 bool isPrime_sil(mpz_int num)
 {
 	if (num <=1)

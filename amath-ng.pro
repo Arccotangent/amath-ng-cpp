@@ -31,6 +31,16 @@ unix:!macx: LIBS += -L$$PWD/../../../usr/local/lib/ -lboost_system
 INCLUDEPATH += $$PWD/../../../usr/local/include
 DEPENDPATH += $$PWD/../../../usr/local/include
 
+unix:!macx: LIBS += -L$$PWD/../../../usr/lib/ -lncurses
+
+INCLUDEPATH += $$PWD/../../../usr/include
+DEPENDPATH += $$PWD/../../../usr/include
+
+unix:!macx: LIBS += -L$$PWD/../../../usr/lib/ -lmenu
+
+INCLUDEPATH += $$PWD/../../../usr/include
+DEPENDPATH += $$PWD/../../../usr/include
+
 DISTFILES += \
     LICENSE \
     README.md

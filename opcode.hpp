@@ -2,6 +2,9 @@
 #define OPCODE_HPP
 #include <cstring>
 #include <iostream>
+#include <ncurses.h>
+#include <vector>
+#include "amath-ng.hpp"
 using namespace std;
 int opcode, args;
 
@@ -324,6 +327,13 @@ int getOpCode(int argcount, string op)
 	{
 		if (args == 1)
 			opcode = 45;
+		else
+			opcode = -1;
+	}
+	else if (strcmp(op_c, "logb") == 0)
+	{
+		if (args == 2)
+			opcode = 46;
 		else
 			opcode = -1;
 	}
