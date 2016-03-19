@@ -22,7 +22,6 @@ core
 tags
 .DS_Store
 *.debug
-Makefile*
 *.prl
 *.app
 moc_*.cpp
@@ -69,5 +68,5 @@ Thumbs.db
 # --------
 *.dll
 *.exe
-
+amath-ng
 

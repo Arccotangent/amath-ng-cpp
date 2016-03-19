@@ -50,6 +50,7 @@ int main(const int argc, char* argv[])
 						"log10 <number> - Base 10 logarithm\n"
 						"logb <base> <number> - Logarithm with custom base\n"
 						"cpi <principal> <% rate> <compounds per year> <time in years> - Calculate compound interest\n"
+						"getf <number> - Get factors of number in bundles of 2, then display their sum (to assist in solving quadratic equations using the factoring method)\n"
 						"\n--Geometry--\n\n"
 						"aoc <radius> - Calculate approximate area of circle\n"
 						"hypot <side1> <side2> - Get hypotenuse of right triangle\n"
@@ -651,6 +652,13 @@ int main(const int argc, char* argv[])
 		num2.assign(argv[3]);
 		mpz_int lcm = alcm(num1, num2);
 		cout << static_cast<string>(lcm) << endl;
+	}
+	else if (opcode == 48)
+	{
+		mpz_int num;
+		num.assign(argv[2]);
+		string factors = getfactors(num);
+		cout << factors << endl;
 	}
 	else if (opcode == -1)
 	{
