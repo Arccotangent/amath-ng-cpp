@@ -18,6 +18,6 @@ GMP C
 
 This project uses the C++14 standard.
 
-Build by running this command in a Unix terminal: g++ -o amath-ng main.cpp -lgmp -lboost_random -lboost_thread -lboost_system -std=c++1y
+Build by running 'make all'
 
-You can also build in Qt Creator by importing the project from this repository.
+Install by running 'make install'
