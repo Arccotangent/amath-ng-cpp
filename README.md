@@ -13,6 +13,6 @@
 	Install by running 'make install'
 
 ## Hacking
-	amath-ng can be tweaked by editing amath-ng.hpp
+	amath-ng can be hacked by editing amath-ng.hpp
 	Currently you can hack:
-* The precision of the printed answers in significant figures (default 500)
+	- The precision of the printed answers in significant figures (default 500)
