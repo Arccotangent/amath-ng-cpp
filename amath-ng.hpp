@@ -7,7 +7,8 @@
 using namespace std;
 using namespace boost::multiprecision;
 using boost::multiprecision::backends::gmp_float;
-typedef number<gmp_float<2500>> amath_float;
+const int AMATH_FLOAT_PRECISION = 500; //Precision of amath_float type in significant figures
+typedef number<gmp_float<AMATH_FLOAT_PRECISION>> amath_float;
 
 amath_float* numsort(amath_float num_array[], const unsigned int num_ele); //Sort an array of amath_floats from smallest to largest
 amath_float amax(amath_float num1, amath_float num2); //Returns the greatest of the 2 entered numbers

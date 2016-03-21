@@ -11,3 +11,8 @@
 	This project uses the C++14 standard.
 	Build by running 'make all'
 	Install by running 'make install'
+
+## Hacking
+	amath-ng can be tweaked by editing amath-ng.hpp
+	Currently you can hack:
+* The precision of the printed answers in significant figures (default 500)

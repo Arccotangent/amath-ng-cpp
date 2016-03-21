@@ -75,7 +75,7 @@ int main(const int argc, char* argv[])
 						"asec <number> - Reciprocal Trigonometric Function - Arcsecant\n"
 						"acot <number> - Reciprocal Trigonometric Function - Arccotangent\n"
 						"\n--Science--\n\n"
-						"sf <1 number> - Get amount of sig figs in number\n"
+						"sf <1 number> - Get amount of significant figures in number\n"
 						"pcr <actual> <experimental> - Calculate percent error\n"
 						"hl <amount> - Print amount of half lives with respective ratios\n"
 						"\n--Miscellaneous--\n\n"
@@ -90,7 +90,7 @@ int main(const int argc, char* argv[])
 						"\n--Performance Testing--\n\n"
 						"flopstest - How fast can your computer do math? Computational power is measured in floating point operations per second (FLOP/s)\n"
 		#endif
-						"\nMAXIMUM NUMBER PRECISION BEFORE SCIENTIFIC NOTATION IS USED IS 2,500 DIGITS."
+						"\nMAXIMUM NUMBER PRECISION BEFORE SCIENTIFIC NOTATION IS USED IS " << AMATH_FLOAT_PRECISION << " DIGITS."
 						"\n" << endl;
 		return 1;
 	}
