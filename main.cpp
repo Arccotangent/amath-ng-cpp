@@ -5,21 +5,15 @@
 #include <cstdio>
 #include <iostream>
 #include <cstdlib>
-#include "flopstest.hpp"
-#include "amath-ng.hpp"
-#include "opcode.hpp"
-#ifndef AMATHNG_HPP
-#error "You need amath-ng.hpp to compile amath-ng!"
-#endif
-#ifndef FLOPSTEST_HPP
-#warning "Your build of amath-ng will not support flopstest! (flopstest.hpp not found)"
-#endif
-#ifndef OPCODE_HPP
-#error "You need opcode.hpp to compile amath-ng!"
-#endif
+
+#include <flopstest.hpp>
+#include <amath-ng.hpp>
+#include <opcode.hpp>
+#include <ops/quadratic.hpp>
+#include <ops/vertex.hpp>
+//#include <ops/cubic.hpp>
 using namespace std;
 using namespace boost::multiprecision;
-using boost::multiprecision::backends::gmp_float;
 
 int main(const int argc, char* argv[])
 {
@@ -45,6 +39,7 @@ int main(const int argc, char* argv[])
 						"lcm <2 numbers> - Get LCM (least common multiple) of numbers\n"
 						"\n--Algebra--\n\n"
 						"qdr <a> <b> <c> - Solve quadratic equation equal to 0\n"
+						//"cbc <a> <b> <c> <d> - Solve cubic equation equal to 0\n"
 						"vtx <a> <b> <c> - Get vertex of quadratic equation equal to y OR 0\n"
 						"log <number> - Natural logarithm\n"
 						"log10 <number> - Base 10 logarithm\n"
@@ -86,10 +81,8 @@ int main(const int argc, char* argv[])
 						"ccm <radius> - Calculate circumference of circle\n"
 						"rand <min> <max> [seed] - Generate random integer between MIN and MAX with optional SEED\n"
 						"prm <number> - Test if number is prime by trial division\n"
-		#ifdef FLOPSTEST_HPP
 						"\n--Performance Testing--\n\n"
 						"flopstest - How fast can your computer do math? Computational power is measured in floating point operations per second (FLOP/s)\n"
-		#endif
 						"\nMAXIMUM NUMBER PRECISION BEFORE SCIENTIFIC NOTATION IS USED IS " << AMATH_FLOAT_PRECISION << " DIGITS."
 						"\n" << endl;
 		return 1;
@@ -170,12 +163,7 @@ int main(const int argc, char* argv[])
 		a.assign(argv[2]);
 		b.assign(argv[3]);
 		c.assign(argv[4]);
-		amath_float x1;
-		amath_float x2;
-		amath_float neg_b = -b;
-		amath_float b2 = aexp(b, 2);
-		amath_float fac = 4 * a * c;
-		amath_float discrim = b2 - fac;
+		amath_float discrim = getdiscrim(a, b, c);
 		if (discrim < 0)
 		{
 			cout << "[AMATH-NG] ERR: No real solutions! Discriminant is negative. (Discriminant = " << static_cast<string>(discrim) << ")" << endl;
@@ -185,11 +173,11 @@ int main(const int argc, char* argv[])
 		{
 			cout << "Discriminant = " << static_cast<string>(discrim) << endl;
 		}
-		amath_float dsqrt = asqrt(discrim);
-		x1 = (neg_b + dsqrt) / 2 * a;
-		x2 = (neg_b - dsqrt) / 2 * a;
-		cout << "x = " << static_cast<string>(x1) << endl << flush;
-		cout << "x = " << static_cast<string>(x2) << endl << flush;
+		vector<amath_float> sol = solve(a, b, discrim);
+		amath_float x1 = sol[0];
+		amath_float x2 = sol[1];
+		cout << "x1 = " << static_cast<string>(x1) << endl << flush;
+		cout << "x2 = " << static_cast<string>(x2) << endl << flush;
 	}
 	else if (opcode == 8)
 	{
@@ -206,7 +194,7 @@ int main(const int argc, char* argv[])
 			size_t fnz = number.find_first_not_of("0");
 			string sf = number.substr(fnz, number.npos);
 			cout << sf << endl;
-			cout << "Sig Figs: " << sf.length() << endl;
+			cout << "Significant Figures: " << sf.length() << endl;
 		}
 		else
 		{
@@ -214,7 +202,7 @@ int main(const int argc, char* argv[])
 			size_t lnz = number.find_last_not_of("0");
 			string sf = number.substr(fnz, lnz - fnz + 1);
 			cout << sf << endl;
-			cout << "Sig Figs: " << sf.length() << endl;
+			cout << "Significant Figures: " << sf.length() << endl;
 		}
 	}
 	else if (opcode == 9)
@@ -295,35 +283,7 @@ int main(const int argc, char* argv[])
 		a.assign(argv[2]);
 		b.assign(argv[3]);
 		c.assign(argv[4]);
-		//Side work
-		amath_float b2 = b / a;
-		b2 /= 2;
-		amath_float cs = aexp(b2, 2);
-		//End side work
-		//c /= a;
-		amath_float neg_cs = anegate(cs);
-		amath_float vtx_y = c + neg_cs; //balance equation
-		amath_float vtx_x = sqrt(cs);
-		if (b < 0)
-			vtx_x = anegate(vtx_x); //"Drop" minus sign if b is negative
-		cout << "VERTEX FORM: y = (x + " << static_cast<string>(vtx_x) << ")² + " << static_cast<string>(vtx_y) <<  endl;
-		amath_float neg_vtx_x = anegate(vtx_x);
-		//amath_float neg_vtx_x = vtx_x;
-		cout << "VERTEX: (" << static_cast<string>(neg_vtx_x) << ", " << static_cast<string>(vtx_y) << ")" << endl;
-		amath_float neg_b;
-		//if (b < 0)
-		//	neg_b = b;
-		//else
-			neg_b = anegate(b);
-		amath_float a2 = a * 2;
-		amath_float vtx_x_verify = neg_b / a2;
-		if (vtx_x_verify == neg_vtx_x)
-			cout << "VERIFIED - Good vertex." << endl;
-		else
-		{
-			cout << "NOT VERIFIED - Bad vertex. If you can manually verify this vertex (-b / 2a = vertex x) then please report this error on the GitLab repository." << endl;
-			cout << a2 << endl << neg_b << endl << neg_vtx_x << endl;
-		}
+		solve_vertex(a, b, c);
 	}
 	else if (opcode == 16)
 	{
@@ -660,6 +620,39 @@ int main(const int argc, char* argv[])
 		string factors = getfactors(num);
 		cout << factors << endl;
 	}
+	/*
+	else if (opcode == 49)
+	{
+		amath_float a;
+		amath_float b;
+		amath_float c;
+		amath_float d;
+		a.assign(argv[2]);
+		b.assign(argv[3]);
+		c.assign(argv[4]);
+		d.assign(argv[5]);
+		amath_float discrim = getdiscrim(a, b, c, d);
+		cout << "Discriminant: " << static_cast<string>(discrim) << endl;
+		if (discrim < 0)
+		{
+			cout << "Discriminant is negative. Only one real solution." << endl;
+			amath_float x1 = getsol_1(a, b, c, d, discrim);
+			cout << "x1 = " << static_cast<string>(x1) << endl;
+			cout << "x2 = Complex" << endl;
+			cout << "x3 = Complex" << endl;
+		}
+		else
+		{
+			cout << "Discriminant is zero or positive. All solutions are real." << endl;
+			amath_float x1 = getsol_1(a, b, c, d, discrim);
+			amath_float x2 = getsol_2(a, b, c, d, discrim);
+			amath_float x3 = getsol_3(a, b, c, d, discrim);
+			cout << "x1 = " << static_cast<string>(x1) << endl;
+			cout << "x2 = " << static_cast<string>(x2) << endl;
+			cout << "x3 = " << static_cast<string>(x3) << endl;
+		}
+	}
+	*/
 	else if (opcode == -1)
 	{
 		cerr << "[AMATH-NG] ERR: Review your argument count!" << endl;
@@ -670,11 +663,7 @@ int main(const int argc, char* argv[])
 	}
 	else if (opcode == -50)
 	{
-#ifdef FLOPSTEST_HPP
 		speedtest();
-#else
-		cerr << "[AMATH-NG] ERR: This build does not support flopstest since it was built without the header." << endl;
-#endif
 	}
 	else if (opcode == -100)
 	{

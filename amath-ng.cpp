@@ -72,6 +72,13 @@ mpz_int msqrt(mpz_int num)
 	return res;
 }
 
+amath_float acbrt(amath_float num)
+{
+	amath_float ot = 1 / 3;
+	amath_float pwr = aexp(num, ot);
+	return pwr;
+}
+
 mpz_int agcd(mpz_int num1, mpz_int num2)
 {
 	return gcd(num1, num2);

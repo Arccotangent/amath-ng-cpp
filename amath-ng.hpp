@@ -20,6 +20,7 @@ mpz_int afct(mpz_int num); //Factorial (num!) (ex: 5! = 5 * 4 * 3 * 2 * 1)
 amath_float anegate(amath_float num); //Negate a number
 amath_float asqrt(amath_float num); //Square root
 mpz_int msqrt(mpz_int num); //Square root (integer)
+amath_float acbrt(amath_float num); //Cube root
 mpz_int agcd(mpz_int num1, mpz_int num2); //Greatest common denominator
 mpz_int alcm(mpz_int num1, mpz_int num2); //Least common multiple
 bool isPrime_sil(mpz_int num); //Check if a number is prime without printing information to the console
