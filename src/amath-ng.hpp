@@ -2,6 +2,7 @@
 #define AMATHNG_HPP
 #include <boost/multiprecision/gmp.hpp>
 #include <boost/sort/sort.hpp>
+#include <config.h>
 #include <vector>
 #include <iostream>
 using namespace std;

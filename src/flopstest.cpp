@@ -1,9 +1,4 @@
-#ifndef FLOPSTEST_HPP
-#define FLOPSTEST_HPP
-#include <iostream>
-#include <boost/thread.hpp>
-#include <unistd.h>
-#include <ctime>
+#include <flopstest.hpp>
 using namespace std;
 time_t initial = time(0);
 double count_int = 0;
@@ -25,7 +20,7 @@ void dsp()
 {
 	while (true)
 	{
-		boost::thread helium(counter);
+		thread helium(counter);
 		helium.join();
 		usleep(200000);
 	}
@@ -34,7 +29,7 @@ void dsp()
 void speedtest()
 {
 	system("clear");
-	boost::thread hydrogen(dsp);
+	thread hydrogen(dsp);
 	while (true)
 	{
 		c = a + b;
@@ -42,4 +37,3 @@ void speedtest()
 	}
 }
 
-#endif // FLOPSTEST_HPP

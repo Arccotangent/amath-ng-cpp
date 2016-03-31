@@ -1,0 +1,209 @@
+Build 42
+
+Introduce GNU build system (autotools)
+Introduce proper versioning system (build numbers, this changelog)
+Project is now licensed as free software under the GNU GPL version 3
+2 dependencies eliminated - libboost_system and libboost_thread
+1 dependency introduced - libpthread
+Update README.md
+Flopstest is optional and now broken
+Cubic operation is optional
+
+Build 41
+
+Split code up more
+Add base for cbc (solve cubic equation), experimental function.
+
+Build 40
+
+Update README.md
+
+Build 39
+
+Reduce precision to 500 significant figures
+Fixed definition of 'sf' operation in main.cpp
+Precision of printed answers can now be hacked by editing amath-ng.hpp, see README.md
+
+Build 38
+
+Update README.md
+
+Build 37
+
+Update README.md
+
+Build 36
+
+Update README.md
+
+Build 35
+
+Add getf (get factors)
+Split compilation (amath-ng.hpp and amath-ng.cpp)
+Update LICENSE and .gitignore
+Remove amath-ng.pro as it is useless
+You can now use amath-ng.hpp in your own programs!
+Add more options to Makefile (install and clean)
+
+Build 34
+
+Add lcm (least common multiple)
+Renamed gcf to gcd (greatest common denominator), fixed bug with
+opcode.hpp, gcd was not registered as an operation in previous release
+but was renamed
+
+Build 33
+
+Add logb (logarithm with custom base)
+Minor bugfixes and typo fixes
+
+Build 32
+
+Fix minor typo
+
+Build 31
+
+Notes on inverse trigonometric functions
+
+Build 30
+
+Add inverse trigonometric functions (csc, sec, cot, acsc, asec, acot)
+
+Build 29
+
+Add half life
+Higher range of random seeds (32 bit -> 64 bit)
+Random number generator faster (mt19937_64 -> mt19937) mersenne twister
+
+Build 28
+
+Fix prm (prime) operation
+Now uses trial division, therefore is slower but accurate
+Add pprm - Print x first primes
+
+Build 27
+
+Begin work to fix primality test operation
+Organize operation list
+Remove version numbers
+
+Build 26
+
+Add law of sines and law of cosines
+Notes on trigonometric functions sin, cos, tan
+
+Build 25
+
+Remove unnecessary headers, move include statements around
+
+Build 24
+
+Add circumference
+
+Build 23
+
+<broken>
+
+Build 22
+
+Order is now infinite precision like all other operations
+
+Build 21
+
+Add order, can only handle doubles
+
+Build 20
+
+Add z-score
+
+Build 19
+
+Organize code
+Remove printAns function and replace all calls to regular output to stdout
+
+Build 18
+
+Add standard deviation, remove unneeded header
+
+Build 17
+
+Add average (mean) and remove prime
+Updated compiler on build system to GCC 6.0.0, 4 headers removed:
+all objects of type cpp_int changed to mpz_int
+Rescued sig fig and GCF ops
+Vertex op bug fix
+Library GMP C++ no longer required for compilation (turns out never),
+only GMP C
+C++11 -> C++14
+
+Build 16
+
+Add compound interest
+
+Build 15
+
+Add percent error
+
+Build 14
+
+Add psq and ppwr operations
+
+Build 13
+
+Add ability to specify RNG seed
+
+Build 12
+
+Add natural logarithm (ln) and log10
+Add ability to specify seed for random number gen <later found broken>
+Random number gen displays seed on execution
+Bugfixes
+
+Build 11
+
+Add seed functionality to rand
+Add cube root (cbrt)
+Exp now takes decimal exponents
+
+Build 10
+
+More bugfixes
+
+Build 9
+
+Hotfix for asin, acos, atan
+
+Build 8
+
+Added trigonometric functions (sin, cos, tan, asin, acos, atan)
+
+Build 7
+
+Add LICENSE, README.md, and flopstest.hpp
+Add flopstest operation, see how fast your computer can do math!
+2 new dependencies - Boost.Thread and Boost.System
+
+Build 6
+
+Added hypotenuse calculator
+
+Build 5
+
+Optimizations for prime
+
+Build 4
+
+Hotfix 2 for vertex
+Bugfixes
+
+Build 3
+
+Hotfix for vertex
+
+Build 2
+
+Add vertex operation
+
+Build 1
+
+Copy from amath original project

@@ -70,3 +70,6 @@ Thumbs.db
 *.exe
 amath-ng
 
+# Autoconf files
+*.Po
+*.Tpo

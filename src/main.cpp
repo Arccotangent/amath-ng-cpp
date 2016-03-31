@@ -5,13 +5,18 @@
 #include <cstdio>
 #include <iostream>
 #include <cstdlib>
+#include <config.h>
 
+#if ENABLE_FLOPSTEST==1
 #include <flopstest.hpp>
+#endif
 #include <amath-ng.hpp>
 #include <opcode.hpp>
-#include <ops/quadratic.hpp>
-#include <ops/vertex.hpp>
-//#include <ops/cubic.hpp>
+#include <quadratic.hpp>
+#include <vertex.hpp>
+#if ENABLE_CUBIC_OP==1
+#include <cubic.hpp>
+#endif
 using namespace std;
 using namespace boost::multiprecision;
 
@@ -21,7 +26,7 @@ int main(const int argc, char* argv[])
 	{
 		//If an operation is removed, do not delete it, but simply comment it out here.
 		//Unless it is permanently removed
-		cout <<	"AMath-NG - A Command Line Calculator by Arccotangent\n\n"
+		cout << PACKAGE_STRING << " - A Command Line Calculator by Arccotangent\n\n"
 						"Usage: amath-ng <operation> <numbers>\n\n"
 						"List of operations below\n"
 						"\n--General--\n\n"
@@ -39,7 +44,9 @@ int main(const int argc, char* argv[])
 						"lcm <2 numbers> - Get LCM (least common multiple) of numbers\n"
 						"\n--Algebra--\n\n"
 						"qdr <a> <b> <c> - Solve quadratic equation equal to 0\n"
-						//"cbc <a> <b> <c> <d> - Solve cubic equation equal to 0\n"
+						#if ENABLE_CUBIC_OP==1
+						"cbc <a> <b> <c> <d> - Solve cubic equation equal to 0\n"
+						#endif
 						"vtx <a> <b> <c> - Get vertex of quadratic equation equal to y OR 0\n"
 						"log <number> - Natural logarithm\n"
 						"log10 <number> - Base 10 logarithm\n"
@@ -81,9 +88,11 @@ int main(const int argc, char* argv[])
 						"ccm <radius> - Calculate circumference of circle\n"
 						"rand <min> <max> [seed] - Generate random integer between MIN and MAX with optional SEED\n"
 						"prm <number> - Test if number is prime by trial division\n"
+						#if ENABLE_FLOPSTEST==1
 						"\n--Performance Testing--\n\n"
 						"flopstest - How fast can your computer do math? Computational power is measured in floating point operations per second (FLOP/s)\n"
-						"\nMAXIMUM NUMBER PRECISION BEFORE SCIENTIFIC NOTATION IS USED IS " << AMATH_FLOAT_PRECISION << " DIGITS."
+						#endif
+						"\nMAXIMUM PRECISION IS SET TO " << AMATH_FLOAT_PRECISION << " SIGNIFICANT FIGURES"
 						"\n" << endl;
 		return 1;
 	}
@@ -620,7 +629,7 @@ int main(const int argc, char* argv[])
 		string factors = getfactors(num);
 		cout << factors << endl;
 	}
-	/*
+	#if ENABLE_CUBIC_OP==1
 	else if (opcode == 49)
 	{
 		amath_float a;
@@ -652,24 +661,26 @@ int main(const int argc, char* argv[])
 			cout << "x3 = " << static_cast<string>(x3) << endl;
 		}
 	}
-	*/
+	#endif
 	else if (opcode == -1)
 	{
-		cerr << "[AMATH-NG] ERR: Review your argument count!" << endl;
+		cerr << PACKAGE_NAME << ": ERR: Review your argument count!" << endl;
 	}
 	else if (opcode == -2)
 	{
-		cerr << "[AMATH-NG] ERR: Invalid operation!" << endl;
+		cerr << PACKAGE_NAME << ": ERR: Invalid operation!" << endl;
 	}
+	#if ENABLE_FLOPSTEST==1
 	else if (opcode == -50)
 	{
 		speedtest();
 	}
+	#endif
 	else if (opcode == -100)
 	{
-		cout << "[AMATH-NG] DEBUG: Nothing here." << endl;
+		cout << PACKAGE_NAME << ": DEBUG: Nothing here." << endl;
 	}
 	else
-		cerr << "[AMATH-NG] ERR: An unknown error has occurred. (INVOPC)" << endl;
+		cerr << PACKAGE_NAME << ": ERR: An unknown error has occurred. (INVOPC)" << endl;
 	return 0;
 }
