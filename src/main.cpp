@@ -53,6 +53,8 @@ int main(const int argc, char* argv[])
 						"logb <base> <number> - Logarithm with custom base\n"
 						"cpi <principal> <% rate> <compounds per year> <time in years> - Calculate compound interest\n"
 						"getf <number> - Get factors of number in bundles of 2, then display their sum (to assist in solving quadratic equations using the factoring method)\n"
+						"st <term number> <common difference> <first term> - Find the nth (TERM NUMBER) term of an arithmetic sequence\n"
+						"ss <term count> <common difference> <first term> <nth term> - Find the sum of n (TERM COUNT) terms in an arithmetic sequence\n"
 						"\n--Geometry--\n\n"
 						"aoc <radius> - Calculate approximate area of circle\n"
 						"hypot <side1> <side2> - Get hypotenuse of right triangle\n"
@@ -101,14 +103,14 @@ int main(const int argc, char* argv[])
 	if (opcode == 1)
 	{
 		amath_float result = 0;
-		unsigned int argcount = argc - 2;
-		for (unsigned int i = 0; i < argcount; i++)
-		{
-			amath_float addend;
-			addend.assign(argv[i + 2]);
-			result += addend;
-		}
-		cout << static_cast<string>(result) << endl;
+                unsigned int argcount = argc - 2;
+                for (unsigned int i = 0; i < argcount; i++)
+                {
+                        amath_float addend;
+                        addend.assign(argv[i + 2]);
+                        result += addend;
+                }
+                cout << static_cast<string>(result) << endl;
 	}
 	else if (opcode == 2)
 	{
@@ -662,6 +664,27 @@ int main(const int argc, char* argv[])
 		}
 	}
 	#endif
+	else if (opcode == 50)
+	{
+		amath_float a1;
+		amath_float d;
+		amath_float n;
+		n.assign(argv[2]);
+		d.assign(argv[3]);
+		a1.assign(argv[4]);
+		amath_float an = a1 + (d * (n - 1));
+		cout << static_cast<string>(an) << endl;
+	}
+	else if (opcode == 51)
+	{
+		amath_float a1, d, n, an;
+		n.assign(argv[2]);
+		d.assign(argv[3]);
+		a1.assign(argv[4]);
+		an.assign(argv[5]);
+		amath_float sn = (n * (a1, an)) / 2;
+		cout << static_cast<string>(sn) << endl;
+	}
 	else if (opcode == -1)
 	{
 		cerr << PACKAGE_NAME << ": ERR: Review your argument count!" << endl;
