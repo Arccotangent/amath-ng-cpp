@@ -682,7 +682,7 @@ int main(const int argc, char* argv[])
 		d.assign(argv[3]);
 		a1.assign(argv[4]);
 		an.assign(argv[5]);
-		amath_float sn = (n * (a1, an)) / 2;
+		amath_float sn = (n * (a1 + an)) / 2;
 		cout << static_cast<string>(sn) << endl;
 	}
 	else if (opcode == -1)

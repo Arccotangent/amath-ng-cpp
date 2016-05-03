@@ -15,3 +15,10 @@ A command line calculator for many different uses, from the basic to the extreme
 amath-ng can be hacked by editing amath-ng.hpp
 Currently you can hack:
 - The precision of the printed answers in significant figures (default 500)
+
+## Exact Answer Storage
+In some cases, users may need to store the exact answer returned by amath-ng for later usage. This can be done by logging the answer to a file or an environment variable.
+
+Export the square root of 2 to an environment variable named 'ANS': `export ANS=$(amath-ng sqrt 2)`
+Log the square root of 2 to a file: `amath-ng sqrt 2 > sqrt2.txt`
+
