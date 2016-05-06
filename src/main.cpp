@@ -15,6 +15,7 @@
 #include <quadratic.hpp>
 #include <vertex.hpp>
 #include <combination.hpp>
+#include <permutation.hpp>
 #if ENABLE_CUBIC_OP==1
 #include <cubic.hpp>
 #endif
@@ -57,7 +58,7 @@ int main(const int argc, char* argv[])
 						"st <term number> <common difference> <first term> - Find the nth (TERM NUMBER) term of an arithmetic sequence\n"
 						"ss <term count> <common difference> <first term> <nth term> - Find the sum of n (TERM COUNT) terms in an arithmetic sequence\n"
 						"ncr <n> <r> - Combination (nCr)\n"
-						//"npr <n> <r> - Permutation (nPr)\n"
+						"npr <n> <r> - Permutation (nPr)\n"
 						"\n--Geometry--\n\n"
 						"aoc <radius> - Calculate approximate area of circle\n"
 						"hypot <side1> <side2> - Get hypotenuse of right triangle\n"
@@ -695,6 +696,14 @@ int main(const int argc, char* argv[])
 		r.assign(argv[3]);
 		mpz_int c = ncr(n, r);
 		cout << static_cast<string>(c) << endl;
+	}
+	else if (opcode == 53)
+	{
+		mpz_int n, r;
+		n.assign(argv[2]);
+		r.assign(argv[3]);
+		mpz_int p = npr(n, r);
+		cout << static_cast<string>(p) << endl;
 	}
 	else if (opcode == -1)
 	{
