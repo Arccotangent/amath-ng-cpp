@@ -15,6 +15,7 @@ A command line calculator for many different uses, from the basic to the extreme
 amath-ng can be hacked by editing amath-ng.hpp
 Currently you can hack:
 - The precision of the printed answers in significant figures (default 500)
+- The repetitions of the Miller-Rabin primality test (default 50)
 
 ## Exact Answer Storage
 In some cases, users may need to store the exact answer returned by amath-ng for later usage. This can be done by logging the answer to a file or an environment variable.
