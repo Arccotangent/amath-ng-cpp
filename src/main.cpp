@@ -89,11 +89,12 @@ int main(const int argc, char* argv[])
 						"\n--Miscellaneous--\n\n"
 						"psq <amount> - Print AMOUNT perfect squares starting with 1\n"
 						"ppwr <amount> <exponent> - Print AMOUNT bases to EXPONENT starting with 1\n"
-						"pprm <amount> - Print AMOUNT prime numbers starting with 3\n"
+						"pprm <amount> - Print AMOUNT probable prime numbers starting with 3\n"
 						"ord <numbers> - Order numbers smallest to greatest\n"
 						"ccm <radius> - Calculate circumference of circle\n"
 						"rand <min> <max> [seed] - Generate random integer between MIN and MAX with optional SEED\n"
-						"prm <number> - Test if number is prime by trial division\n"
+						"prm <number> - Test if number is prime by Miller-Rabin primality test\n"
+						"genprm <bits> - Generate a prime number with bitsize BITS\n"
 						#if ENABLE_FLOPSTEST==1
 						"\n--Performance Testing--\n\n"
 						"flopstest - How fast can your computer do math? Computational power is measured in floating point operations per second (FLOP/s)\n"
@@ -243,11 +244,20 @@ int main(const int argc, char* argv[])
 	{
 		mpz_int num;
 		num.assign(argv[2]);
-		bool p = isPrime(num);
-		if (p)
-			cout << "Number is prime." << endl;
-		else
-			cout << "Number is not prime." << endl;
+		amath_float reps = PRIME_TEST_REPS;
+		int p = isPrime(num);
+		if (p == 0)
+		{
+			cout << "Number is definitely composite." << endl;
+		}
+		else if (p == 1)
+		{
+			cout << "Number is probably prime. (Chance: " << 100 - (aexp(4, anegate(reps)) * 100) << "%)" << endl;
+		}
+		else if (p == 2)
+		{
+			cout << "Number is definitely prime." << endl;
+		}
 	}
 	else if (opcode == 12)
 	{
@@ -541,14 +551,19 @@ int main(const int argc, char* argv[])
 	else if (opcode == 38)
 	{
 		mpz_int num, prime = 3, i = 0;
-		bool p;
+		int p;
 		num.assign(argv[2]);
 		while (i < num)
 		{
-			p = isPrime_sil(prime);
-			if (p)
+			p = isPrime(prime);
+			if (p == 1)
 			{
-				cout << static_cast<string>(prime) << endl;
+				cout << "Probable: " << static_cast<string>(prime) << endl;
+				i++;
+			}
+			else if (p == 2)
+			{
+				cout << "Definite: " << static_cast<string>(prime) << endl;
 				i++;
 			}
 			prime += 2;
@@ -704,6 +719,21 @@ int main(const int argc, char* argv[])
 		r.assign(argv[3]);
 		mpz_int p = npr(n, r);
 		cout << static_cast<string>(p) << endl;
+	}
+	else if (opcode == 54)
+	{
+		char* a;
+		mp_bitcnt_t bits = strtoul(argv[2], &a, 10);
+		gmp_randstate_t rs;
+		gmp_randinit_mt(rs);
+		boost::random::random_device r;
+		unsigned long long seed = r() * r();
+		gmp_randseed_ui(rs, seed);
+		mpz_t num;
+		mpz_init(num);
+		mpz_urandomb(num, rs, bits);
+		mpz_nextprime(num, num);
+		gmp_printf("%Zd\n", num);
 	}
 	else if (opcode == -1)
 	{

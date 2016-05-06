@@ -89,63 +89,12 @@ mpz_int alcm(mpz_int num1, mpz_int num2)
 	return lcm(num1, num2);
 }
 
-bool isPrime_sil(mpz_int num)
+int isPrime(mpz_int num)
 {
-	if (num <=1)
-		return false;
-	else if (num == 2)
-		return true;
-	else if (num % 2 == 0)
-		return false;
-	else
-	{
-		bool prime = true;
-		mpz_int divisor = 3;
-		mpz_int num_d = static_cast<mpz_int>(num);
-		mpz_int upperLimit = static_cast<mpz_int>(msqrt(num_d) + 1);
-
-		while (divisor <= upperLimit)
-		{
-			if (num % divisor == 0)
-			{
-				prime = false;
-				break;
-			}
-			divisor +=2;
-		}
-		return prime;
-	}
-}
-
-bool isPrime(mpz_int num)
-{
-	if (num <=1)
-		return false;
-	else if (num == 2)
-		return true;
-	else if (num % 2 == 0)
-		return false;
-	else
-	{
-		bool prime = true;
-		mpz_int divisor = 3;
-		mpz_int num_d = static_cast<mpz_int>(num);
-		mpz_int upperLimit = static_cast<mpz_int>(msqrt(num_d) + 1);
-
-		while (divisor <= upperLimit)
-		{
-			if (num % divisor == 0)
-			{
-				prime = false;
-				cout << "\n[AMATH-NG/PRM] Number is divisible by " << static_cast<string>(divisor) << endl;
-				break;
-			}
-			if (divisor % 10001 == 0)
-				cout << "[AMATH-NG/PRM/PROGRESS] Tested divisors up to " << static_cast<string>(divisor) << " out of " << static_cast<string>(upperLimit) << "\r" << flush;
-			divisor +=2;
-		}
-		return prime;
-	}
+	mpz_t nt;
+	mpz_init(nt);
+	mpz_set(nt, num.backend().data());
+	return mpz_probab_prime_p(nt, PRIME_TEST_REPS); //Miller-Rabin probabilistic primality test
 }
 
 void afactor(mpz_int num)
@@ -179,6 +128,13 @@ void afactor(mpz_int num)
 	cout << endl;
 	*/
 	//POLLARD RHO ALGORITHM ABOVE
+
+	if (isPrime(num) == 2) //Number is definitely prime, so factorization would be useless
+	{
+		cout << static_cast<string>(num) << endl;
+		return;
+	}
+
 	cout << static_cast<string>(num) << ": " << flush;
 	while (num % 2 == 0)
 	{
