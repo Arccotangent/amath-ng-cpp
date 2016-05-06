@@ -14,6 +14,7 @@
 #include <opcode.hpp>
 #include <quadratic.hpp>
 #include <vertex.hpp>
+#include <combination.hpp>
 #if ENABLE_CUBIC_OP==1
 #include <cubic.hpp>
 #endif
@@ -55,6 +56,8 @@ int main(const int argc, char* argv[])
 						"getf <number> - Get factors of number in bundles of 2, then display their sum (to assist in solving quadratic equations using the factoring method)\n"
 						"st <term number> <common difference> <first term> - Find the nth (TERM NUMBER) term of an arithmetic sequence\n"
 						"ss <term count> <common difference> <first term> <nth term> - Find the sum of n (TERM COUNT) terms in an arithmetic sequence\n"
+						"ncr <n> <r> - Combination (nCr)\n"
+						//"npr <n> <r> - Permutation (nPr)\n"
 						"\n--Geometry--\n\n"
 						"aoc <radius> - Calculate approximate area of circle\n"
 						"hypot <side1> <side2> - Get hypotenuse of right triangle\n"
@@ -684,6 +687,14 @@ int main(const int argc, char* argv[])
 		an.assign(argv[5]);
 		amath_float sn = (n * (a1 + an)) / 2;
 		cout << static_cast<string>(sn) << endl;
+	}
+	else if (opcode == 52)
+	{
+		mpz_int n, r;
+		n.assign(argv[2]);
+		r.assign(argv[3]);
+		mpz_int c = ncr(n, r);
+		cout << static_cast<string>(c) << endl;
 	}
 	else if (opcode == -1)
 	{

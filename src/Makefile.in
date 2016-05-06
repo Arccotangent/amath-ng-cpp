@@ -105,12 +105,12 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am__amath_ng_SOURCES_DIST = main.cpp amath-ng.cpp vertex.cpp \
-	quadratic.cpp cubic.cpp flopstest.cpp
+	quadratic.cpp combination.cpp cubic.cpp flopstest.cpp
 @ENABLECUBICOP_TRUE@am__objects_1 = cubic.$(OBJEXT)
 @ENABLEFLOPSTEST_TRUE@am__objects_2 = flopstest.$(OBJEXT)
 am_amath_ng_OBJECTS = main.$(OBJEXT) amath-ng.$(OBJEXT) \
-	vertex.$(OBJEXT) quadratic.$(OBJEXT) $(am__objects_1) \
-	$(am__objects_2)
+	vertex.$(OBJEXT) quadratic.$(OBJEXT) combination.$(OBJEXT) \
+	$(am__objects_1) $(am__objects_2)
 amath_ng_OBJECTS = $(am_amath_ng_OBJECTS)
 amath_ng_LDADD = $(LDADD)
 AM_V_P = $(am__v_P_@AM_V@)
@@ -272,7 +272,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 amath_ng_SOURCES = main.cpp amath-ng.cpp vertex.cpp quadratic.cpp \
-	$(am__append_1) $(am__append_2)
+	combination.cpp $(am__append_1) $(am__append_2)
 all: all-am
 
 .SUFFIXES:
@@ -360,6 +360,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/amath-ng.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/combination.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cubic.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/flopstest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
