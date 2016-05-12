@@ -21,5 +21,6 @@ Currently you can hack:
 In some cases, users may need to store the exact answer returned by amath-ng for later usage. This can be done by logging the answer to a file or an environment variable.
 
 Export the square root of 2 to an environment variable named 'ANS': `export ANS=$(amath-ng sqrt 2)`
+
 Log the square root of 2 to a file: `amath-ng sqrt 2 > sqrt2.txt`
 
