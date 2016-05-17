@@ -3,9 +3,6 @@
 /* Define to 1 if cubic operation is enabled */
 #undef ENABLE_CUBIC_OP
 
-/* Define 1 if flopstest is enabled */
-#undef ENABLE_FLOPSTEST
-
 /* define if the Boost library is available */
 #undef HAVE_BOOST
 

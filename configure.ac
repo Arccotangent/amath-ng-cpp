@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([amath-ng], [5-6-2016], [bugs-amath-ng@arccotangent.net])
+AC_INIT([amath-ng], [5-17-2016], [bugs-amath-ng@arccotangent.net])
 AM_INIT_AUTOMAKE([-Wall])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
@@ -16,15 +16,6 @@ no) enablecubicop=false ;;
 esac], [enablecubicop=false])
 AM_CONDITIONAL([ENABLECUBICOP], [test x$enablecubicop = xtrue])
 AM_COND_IF([ENABLECUBICOP], AC_DEFINE([ENABLE_CUBIC_OP], [1], [Define to 1 if cubic operation is enabled]), AC_DEFINE([ENABLE_CUBIC_OP], [0], [Define to 1 if cubic operation is enabled]))
-
-AC_ARG_ENABLE([flopstest], AS_HELP_STRING([--enable-flopstest], [Enable broken flopstest operation]), 
-[case "${enableval}" in
-yes) enableflopstest=true ;;
-no) enableflopstest=false ;;
-*) AC_MSG_ERROR([bad value '${enableval}' for --enable-flopstest]) ;;
-esac], [enableflopstest=false])
-AM_CONDITIONAL([ENABLEFLOPSTEST], [test x$enableflopstest = xtrue])
-AM_COND_IF([ENABLEFLOPSTEST], AC_DEFINE([ENABLE_FLOPSTEST], [1], [Define to 1 if flopstest is enabled]), AC_DEFINE([ENABLE_FLOPSTEST], [0], [Define 1 if flopstest is enabled]))
 
 # Checks for programs.
 AC_PROG_CXX

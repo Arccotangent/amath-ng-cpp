@@ -11,9 +11,13 @@ A command line calculator for many different uses, from the basic to the extreme
 	make all
 	make install
 
+### Generating a 'configure' script
+To generate the 'configure' script used to build amath-ng, run `autoreconf --install` in the base directory.
+
 ## Hacking
 amath-ng can be hacked by editing amath-ng.hpp
-Currently you can hack:
+
+Currently you can play with:
 - The precision of the printed answers in significant figures (default 500)
 - The repetitions of the Miller-Rabin primality test (default 50)
 

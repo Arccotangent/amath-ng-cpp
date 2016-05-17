@@ -7,15 +7,13 @@
 #include <cstdlib>
 #include <config.h>
 
-#if ENABLE_FLOPSTEST==1
-#include <flopstest.hpp>
-#endif
 #include <amath-ng.hpp>
 #include <opcode.hpp>
 #include <quadratic.hpp>
 #include <vertex.hpp>
 #include <combination.hpp>
 #include <permutation.hpp>
+
 #if ENABLE_CUBIC_OP==1
 #include <cubic.hpp>
 #endif
@@ -95,10 +93,6 @@ int main(const int argc, char* argv[])
 						"rand <min> <max> [seed] - Generate random integer between MIN and MAX with optional SEED\n"
 						"prm <number> - Test if number is prime by Miller-Rabin primality test\n"
 						"genprm <bits> - Generate a prime number with bitsize BITS\n"
-						#if ENABLE_FLOPSTEST==1
-						"\n--Performance Testing--\n\n"
-						"flopstest - How fast can your computer do math? Computational power is measured in floating point operations per second (FLOP/s)\n"
-						#endif
 						"\nMAXIMUM PRECISION IS SET TO " << AMATH_FLOAT_PRECISION << " SIGNIFICANT FIGURES"
 						"\n" << endl;
 		return 1;
@@ -743,12 +737,6 @@ int main(const int argc, char* argv[])
 	{
 		cerr << PACKAGE_NAME << ": ERR: Invalid operation!" << endl;
 	}
-	#if ENABLE_FLOPSTEST==1
-	else if (opcode == -50)
-	{
-		speedtest();
-	}
-	#endif
 	else if (opcode == -100)
 	{
 		cout << PACKAGE_NAME << ": DEBUG: Nothing here." << endl;
