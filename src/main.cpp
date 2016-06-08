@@ -5,7 +5,6 @@
 #include <cstdio>
 #include <iostream>
 #include <cstdlib>
-#include <config.h>
 
 #include <amath-ng.hpp>
 #include <opcode.hpp>
@@ -657,10 +656,12 @@ int main(const int argc, char* argv[])
 		d.assign(argv[5]);
 		amath_float discrim = getdiscrim(a, b, c, d);
 		cout << "Discriminant: " << static_cast<string>(discrim) << endl;
+		amath_float p = getP(a, b, c);
+		amath_float q = getQ(a, b, c, d);
 		if (discrim < 0)
 		{
 			cout << "Discriminant is negative. Only one real solution." << endl;
-			amath_float x1 = getsol_1(a, b, c, d, discrim);
+			amath_float x1 = get1sol(a, b, c, d, discrim);
 			cout << "x1 = " << static_cast<string>(x1) << endl;
 			cout << "x2 = Complex" << endl;
 			cout << "x3 = Complex" << endl;
@@ -668,12 +669,11 @@ int main(const int argc, char* argv[])
 		else
 		{
 			cout << "Discriminant is zero or positive. All solutions are real." << endl;
-			amath_float x1 = getsol_1(a, b, c, d, discrim);
-			amath_float x2 = getsol_2(a, b, c, d, discrim);
-			amath_float x3 = getsol_3(a, b, c, d, discrim);
-			cout << "x1 = " << static_cast<string>(x1) << endl;
-			cout << "x2 = " << static_cast<string>(x2) << endl;
-			cout << "x3 = " << static_cast<string>(x3) << endl;
+			amath_float* s = (amath_float*) malloc(sizeof(amath_float) * 3 + 16);
+			s = get3sol(a, p, q);
+			cout << "x1 = " << static_cast<string>(s[0]) << endl;
+			cout << "x2 = " << static_cast<string>(s[1]) << endl;
+			cout << "x3 = " << static_cast<string>(s[2]) << endl;
 		}
 	}
 	#endif

@@ -2,8 +2,8 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([amath-ng], [5-17-2016], [bugs-amath-ng@arccotangent.net])
-AM_INIT_AUTOMAKE([-Wall])
+AC_INIT([amath-ng], [6-8-2016], [bugs-amath-ng@arccotangent.net])
+AM_INIT_AUTOMAKE([-Wall -Wextra])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
 
