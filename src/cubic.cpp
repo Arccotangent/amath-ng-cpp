@@ -28,6 +28,7 @@ amath_float getQ(amath_float a, amath_float b, amath_float c, amath_float d)
 	amath_float ta3 = 27 * aexp(a, 3);
 	amath_float num = tb3 - nabc + ta2d;
 	amath_float q = num / ta3;
+	return q;
 }
 
 amath_float getC(amath_float a, amath_float b, amath_float c, amath_float d, amath_float discrim)
@@ -40,7 +41,7 @@ amath_float getC(amath_float a, amath_float b, amath_float c, amath_float d, ama
 	return acbrt(c2);
 }
 
-amath_float* get3sol(amath_float a, amath_float p, amath_float q)
+vector<amath_float> get3sol(amath_float p, amath_float q)
 {
 	/*
 	amath_float n1o3a = -1 / (3 * a);
@@ -52,19 +53,18 @@ amath_float* get3sol(amath_float a, amath_float p, amath_float q)
 	amath_float t2 = b + ukc + d0oukc;
 	amath_float x1 = n1o3a * t2;
 	*/
-	amath_float* solutions = (amath_float*) malloc(sizeof(amath_float) * 3 + 16);
-	int k2 = 0;
+	vector<amath_float> solutions;
 	for (amath_float k = 0; k < 3; k++)
 	{
-		amath_float var1 = 2 * asqrt(anegate(p) / 3);
+		amath_float var1 = 2 * asqrt(anegate(p / 3));
 		amath_float var2_1 = (3 * q) / (2 * p);
-		var2_1 *= asqrt(anegate(3) / p);
+		var2_1 *= asqrt(-3 / p);
 		amath_float var2_2 = (2 * pi * k) / 3;
-		amath_float var2 = (1 / 3) * boost::multiprecision::acos(var2_1) - var2_2;
-		amath_float var3 = boost::multiprecision::cos(var2);
+		amath_float var2 = (1 / 3) * boost::multiprecision::acos(var2_1);
+		var2 -= var2_2;
+		amath_float var3 = boost::multiprecision::cos(toRadians(var2));
 		amath_float sol = var1 * var3;
-		solutions[k2] = sol;
-		k2++;
+		solutions.push_back(sol);
 	}
 	return solutions;
 }

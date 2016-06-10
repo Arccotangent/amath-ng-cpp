@@ -669,8 +669,7 @@ int main(const int argc, char* argv[])
 		else
 		{
 			cout << "Discriminant is zero or positive. All solutions are real." << endl;
-			amath_float* s = (amath_float*) malloc(sizeof(amath_float) * 3 + 16);
-			s = get3sol(a, p, q);
+			vector<amath_float> s = get3sol(p, q);
 			cout << "x1 = " << static_cast<string>(s[0]) << endl;
 			cout << "x2 = " << static_cast<string>(s[1]) << endl;
 			cout << "x3 = " << static_cast<string>(s[2]) << endl;
