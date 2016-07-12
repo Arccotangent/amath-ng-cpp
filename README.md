@@ -1,6 +1,8 @@
 # amath-ng
 A command line calculator for many different uses, from the basic to the extreme, and more to come.
 
+This version of amath-ng has been discontinued. Find the new cross-platform version at https://github.com/Arccotangent/amath-ng
+
 ## Dependencies
 + Boost Random (libboost_random)
 + POSIX Thread Library (libpthread)
